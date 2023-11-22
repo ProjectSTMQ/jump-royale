@@ -4,8 +4,14 @@ class Player{
         this.y = y
         this.velocity = { x: 0, y: 0 }
         this.acceleration = { x: 0, y: 0.1 }
+
         this.width = width
         this.height = height
+
+        this.leftHeld = false
+        this.rightHeld = false
+
+        this.horizontalSpeed = 2
         this.jumpStrength = -5;
     }
 
@@ -17,7 +23,16 @@ class Player{
         this.draw()
         this.velocity.x += this.acceleration.x;
         this.velocity.y += this.acceleration.y;
-        this.x += this.velocity.x;
+
+        if(this.rightHeld){
+            this.x += this.horizontalSpeed
+        }
+        else if(this.leftHeld){
+            this.x += -this.horizontalSpeed
+        }
+        else{
+            this.x += this.velocity.x;
+        }
         this.y += this.velocity.y;
 
         // Simple ground collision (change later to lines)

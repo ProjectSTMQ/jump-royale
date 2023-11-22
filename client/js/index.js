@@ -29,22 +29,27 @@ function draw(){
     requestAnimationFrame(draw)
 }
 
-window.addEventListener('keypress', (event) => {
+window.addEventListener('keydown', (event) => {
     switch(event.code) {
-        case 'KeyW':
-            player.y = player.y - 10
-            break
-        case 'KeyS':
-            player.y = player.y + 10
-            break
         case 'KeyA':
-            player.x = player.x - 10
+            player.leftHeld = true
             break
         case 'KeyD':
-            player.x = player.x + 10
+            player.rightHeld = true
             break
         case 'Space':
             player.jump()
+            break
+    }
+})
+
+window.addEventListener('keyup', (event) => {
+    switch(event.code) {
+        case 'KeyA':
+            player.leftHeld = false
+            break
+        case 'KeyD':
+            player.rightHeld = false
             break
     }
 })
