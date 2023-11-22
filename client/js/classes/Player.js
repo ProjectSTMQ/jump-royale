@@ -14,6 +14,7 @@ class Player{
     }
 
     update(){
+        this.draw()
         this.velocity.x += this.acceleration.x;
         this.velocity.y += this.acceleration.y;
         this.x += this.velocity.x;

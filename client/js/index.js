@@ -15,18 +15,17 @@ canvas.style.bottom = 0;
 canvas.style.left = 0;
 canvas.style.right = 0;
 
-
+const map = new Map(0)
 const player = new Player(50, 50, 50, 65)
-player.draw()
-console.log(player)
-
-console.log(canvas)
-console.log(ctx)
 
 function draw(){
     ctx.clearRect(1, 1, canvas.width-2, canvas.height-2)
-    player.draw()
+    map.draw()
     player.update()
+    // if(map.checkCollision(player)){
+    //     player.velocity.x = 0
+    //     player.velocity.y = 0
+    // }
     requestAnimationFrame(draw)
 }
 
