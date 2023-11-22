@@ -26,6 +26,7 @@ console.log(ctx)
 function draw(){
     ctx.clearRect(1, 1, canvas.width-2, canvas.height-2)
     player.draw()
+    player.update()
     requestAnimationFrame(draw)
 }
 
@@ -42,6 +43,9 @@ window.addEventListener('keypress', (event) => {
             break
         case 'KeyD':
             player.x = player.x + 10
+            break
+        case 'Space':
+            player.jump()
             break
     }
 })
