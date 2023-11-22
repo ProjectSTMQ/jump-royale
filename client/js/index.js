@@ -22,3 +22,28 @@ console.log(player)
 
 console.log(canvas)
 console.log(ctx)
+
+function draw(){
+    ctx.clearRect(1, 1, canvas.width-2, canvas.height-2)
+    player.draw()
+    requestAnimationFrame(draw)
+}
+
+window.addEventListener('keypress', (event) => {
+    switch(event.code) {
+        case 'KeyW':
+            player.y = player.y - 10
+            break
+        case 'KeyS':
+            player.y = player.y + 10
+            break
+        case 'KeyA':
+            player.x = player.x - 10
+            break
+        case 'KeyD':
+            player.x = player.x + 10
+            break
+    }
+})
+
+draw()
