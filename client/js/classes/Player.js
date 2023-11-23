@@ -28,14 +28,8 @@ class Player{
         let currentLines = levelZero.lines
         this.checkLineCollisions(currentLines)
 
-        
         this.applyPlayerMovement()
         this.applyGravity()
-
-        // Simple ground collision (change later to lines)
-        // if (this.y + this.height > canvas.height) {
-        //     this.y = canvas.height - this.height;
-        // }
     }
 
     applyPlayerMovement(){
@@ -64,10 +58,6 @@ class Player{
         for(let i = 0; i < currentLines.length; i++){
             if(this.isCollidingWithLine(currentLines[i])) collidedLines.push(currentLines[i])
         }
-        // if(collidedLines.length != 0)console.log(collidedLines)
-        // for(let i = 0; i < collidedLines.length; i++){
-        //     if(collidedLines[i].isVertical) console.log(collidedLines[i])
-        // }
     }
 
     isCollidingWithLine(l){
@@ -75,9 +65,9 @@ class Player{
             var isPlayerWithinLineX = (l.x1 < this.x && this.x < l.x2) || (l.x1 < this.x + this.width && this.x + this.width < l.x2) || (this.x < l.x1 && l.x1 < this.x + this.width) || (this.x < l.x2 && l.x2 < this.x + this.width);
             var isPlayerWithinLineY = this.y < l.y1 && l.y1 < this.y + this.height;
 
+            // prob move this
             if(isPlayerWithinLineX && isPlayerWithinLineY){
                 // this.onPlatform = true
-                // console.log("hor")
                 this.y = l.y1 - this.height
             }
             return isPlayerWithinLineX && isPlayerWithinLineY;
@@ -87,11 +77,6 @@ class Player{
             isPlayerWithinLineY = (l.y1 < this.y && this.y < l.y2) || (l.y1 < this.y + this.height && this.y + this.height < l.y2) || (this.y < l.y1 && l.y1 < this.y + this.height) || (this.y < l.y2 && l.y2 < this.y + this.height);
             isPlayerWithinLineX = this.x < l.x1 && l.x1 < this.x + this.width;
 
-            console.log("y: "+isPlayerWithinLineY)
-            console.log("x: "+isPlayerWithinLineX)
-            if(isPlayerWithinLineX && isPlayerWithinLineY) {
-                console.log("bruh")
-            }
             return isPlayerWithinLineX && isPlayerWithinLineY;
         }
 
