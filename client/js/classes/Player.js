@@ -2,6 +2,8 @@ class Player{
     constructor(x, y, width, height){
         this.x = x
         this.y = y
+        this.onPlatform = false
+
         this.velocity = { x: 0, y: 0 }
         this.acceleration = { x: 0, y: 0.1 }
 
@@ -22,7 +24,11 @@ class Player{
     update(){
         this.draw()
         this.velocity.x += this.acceleration.x;
-        this.velocity.y += this.acceleration.y;
+        if(!this.onPlatform){
+            this.velocity.y += this.acceleration.y;
+            this.y += this.velocity.y;
+        }
+   
 
         if(this.rightHeld){
             this.x += this.horizontalSpeed
@@ -33,16 +39,18 @@ class Player{
         else{
             this.x += this.velocity.x;
         }
-        this.y += this.velocity.y;
+     
 
         // Simple ground collision (change later to lines)
         if (this.y + this.height > canvas.height) {
             this.y = canvas.height - this.height;
-            this.velocity.y = 0;
+        
         }
+      
     }
 
     jump(){
         this.velocity.y = this.jumpStrength;
+        this.onPlatform = false;
     }    
 }

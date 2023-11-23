@@ -22,10 +22,11 @@ function draw(){
     ctx.clearRect(1, 1, canvas.width-2, canvas.height-2)
     map.draw()
     player.update()
-    // if(map.checkCollision(player)){
-    //     player.velocity.x = 0
-    //     player.velocity.y = 0
-    // }
+    if(map.checkCollision(player)){
+        player.velocity.x = 0
+        player.velocity.y = 0
+        
+    }
     requestAnimationFrame(draw)
 }
 
