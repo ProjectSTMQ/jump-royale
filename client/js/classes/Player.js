@@ -58,9 +58,10 @@ class Player{
         let collidedLines = []
         for(let i = 0; i < currentLines.length; i++){
             if(this.isCollidingWithLine(currentLines[i])) collidedLines.push(currentLines[i])
-        }       
+        }
 
         // ????
+        if(collidedLines.length == 0) this.onPlatform = false;    
         for(let i = 0; i < collidedLines.length; i++){
             if(collidedLines[i].isHorizontal){
                 if( this.y < collidedLines[i].y1 && collidedLines[i].y1 < this.y + this.height){
