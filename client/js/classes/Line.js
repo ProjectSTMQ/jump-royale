@@ -12,10 +12,20 @@ class Line{
 
     draw() {
         ctx.beginPath();
+
+        this.assertlineValid()
         ctx.moveTo(this.x1, this.y1);
         ctx.lineTo(this.x2, this.y2);
         ctx.stroke();
   
+    }
+ 
+    assertlineValid(){
+        if(!(this.x1<=this.x2 && this.y1 <= this.y2)){
+            console.log("fucked")
+            return false
+        }
+        return true
     }
 
     // checkCollision(player){
