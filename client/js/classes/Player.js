@@ -61,6 +61,10 @@ class Player{
         }
         console.log(collidedLines.length )
        
+        // if(collidedLines.length != 0)console.log(collidedLines)
+        // for(let i = 0; i < collidedLines.length; i++){
+        //     if(collidedLines[i].isVertical) console.log(collidedLines[i])
+        // }
     }
 
     isCollidingWithLine(line){
@@ -74,9 +78,9 @@ class Player{
 
             // prob move this
             if(isPlayerWithinLineX && isPlayerWithinLineY){
-                // this.onPlatform = true
+                this.onPlatform = true
                 // console.log("hor")
-                this.y = l.y1 - this.height
+                this.y = line.y1 - this.height
             }
             return isPlayerWithinLineX && isPlayerWithinLineY;
 
@@ -88,11 +92,22 @@ class Player{
             
             isPlayerWithinLineX = this.x < line.x1 && line.x1 < this.x + this.width;
 
-            console.log("y: "+isPlayerWithinLineY)
-            console.log("x: "+isPlayerWithinLineX)
-            if(isPlayerWithinLineX && isPlayerWithinLineY) {
-                console.log("bruh")
+            
+  
+            if(isPlayerWithinLineX && isPlayerWithinLineY ) {
+                if( this.y < line.y1 && line.y1 < this.y + this.height){
+                    this.onPlatform = true
+                    // console.log("hor")
+                    this.y = line.y1 - this.height
+                }
+                else{
+                    this.onPlatform = false
+                    this.velocity.y = 0
+                    this.velocity.x = 0
+                }
+              
             }
+
             return isPlayerWithinLineX && isPlayerWithinLineY;
         }
 
