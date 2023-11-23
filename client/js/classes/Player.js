@@ -14,9 +14,13 @@ class Player{
 
         this.leftHeld = false
         this.rightHeld = false
+        this.jumpHeld = false
+        this.jumpStrength = 0
+        this.maxJumpStrength = 10
+
+        // this.isJumping = false
 
         this.playerMovementSpeed = 2
-        this.jumpStrength = -5;
     }
 
     draw() {
@@ -27,8 +31,8 @@ class Player{
         this.draw()
         let currentLines = levelZero.lines
         this.checkLineCollisions(currentLines)
-
         this.applyPlayerMovement()
+        this.updateJumpStrength()        
         this.applyGravity()
     }
 
@@ -61,24 +65,16 @@ class Player{
         }
 
         // ????
-        if(collidedLines.length == 0) this.onPlatform = false;    
+        // if(collidedLines.length == 0) this.onPlatform = false
         for(let i = 0; i < collidedLines.length; i++){
             if(collidedLines[i].isHorizontal){
-                if( this.y < collidedLines[i].y1 && collidedLines[i].y1 < this.y + this.height){
-                    this.onPlatform = true
-                    this.y = collidedLines[i].y1 - this.height
-                }
-                else{
-                    this.onPlatform = false
-                    this.velocity.y = 0
-                    this.velocity.x = 0
-                }
+                this.y = collidedLines[i].y1 - this.height
+                this.onPlatform = true
             }
             else if(collidedLines[i].isVertical){
-                this.onPlatform = true
-                this.y = collidedLines[i].y1 - this.height
+                
             }
-        }     
+        }
     }
 
     isCollidingWithLine(line){
@@ -103,8 +99,19 @@ class Player{
         return false
     }
 
+    updateJumpStrength(){
+        if(!this.onPlatform) return
+
+        if(this.jumpHeld && this.jumpStrength < this.maxJumpStrength){
+            this.jumpStrength += 0.1
+        }
+    }
+
     jump(){
-        this.velocity.y = this.jumpStrength;
-        this.onPlatform = false;
+        if(!this.onPlatform) return
+
+        this.velocity.y = -this.jumpStrength
+        this.jumpStrength = 0
+        this.onPlatform = false
     }
 }
