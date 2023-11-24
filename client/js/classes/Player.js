@@ -64,16 +64,37 @@ class Player{
 
 
     checkLineCollisions(currentLines){
+
         let collidedLines = []
-        for(let i = 0; i < currentLines.length; i++){
+        let chosenLine
+
+        let i = 0
+        while(i < currentLines.length && collidedLines < 2){
             if(this.isCollidingWithLine(currentLines[i])) {
-                this.handleCollision(currentLines[i])
+               
                 collidedLines.push(currentLines[i])
             }
+
+            i++
         }
-        if(collidedLines.length == 0){
+
+        if(collidedLines.length > 0 ){
+            if(collidedLines == 2){
+                //to do maje chosenLine equal to currentLines[i] with least amount of correction 
+            }
+            else{
+                chosenLine = collidedLines[0]
+            }
+
+            this.handleCollision(chosenLine)
+        }
+        else{
             this.onPlatform = false
         }
+
+        
+        
+       
     }
 
     handleCollision(line){
