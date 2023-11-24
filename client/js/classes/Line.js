@@ -8,6 +8,7 @@ class Line{
 
         this.isHorizontal = y1 === y2
         this.isVertical = x1 === x2
+        this.isDiagonal = Math.abs(x1 - x2) === Math.abs(y1 - y2)
 
         this.ensurePointsAreInOrder()
     }
@@ -17,7 +18,6 @@ class Line{
         ctx.moveTo(this.x1, this.y1);
         ctx.lineTo(this.x2, this.y2);
         ctx.stroke();
-
     }
 
     // x1 <= x2 and y1 <= y2 for when we check for player collisions in isCollidingWithLine()
