@@ -25,11 +25,16 @@ var logs = ''
 const map = new Map()
 const levelZero = map.getLevels()[0] // tmp
 
+// tmp
+var backgroundImg = new Image();
+backgroundImg.src = levelZero.image;
+
 const player = new Player(50, 50, 50, 65)
 
 // Main function continuously running
 function draw(){
     ctx.clearRect(1, 1, canvas.width-2, canvas.height-2)
+    ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
     
     if(setupLevels){
         for(let object of setupLines){

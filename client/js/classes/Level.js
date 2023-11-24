@@ -2,7 +2,7 @@ class Level{
     constructor(levelNum, levelLines) {
         this.lines = levelLines;
         this.levelNum = levelNum;
-        this.image = null;
+        this.image = './imgs/test.png'; // tmp, need to change constructor parameters (and Map.js createLevels() ?)
     }
 
     draw(){
