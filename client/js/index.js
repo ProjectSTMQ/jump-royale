@@ -34,7 +34,7 @@ window.addEventListener('keydown', (event) => {
             player.rightHeld = true
             break
         case 'Space':
-            player.jump()
+            player.jumpHeld = true
             break
     }
 })
@@ -46,6 +46,10 @@ window.addEventListener('keyup', (event) => {
             break
         case 'KeyD':
             player.rightHeld = false
+            break
+        case 'Space':
+            player.jumpHeld = false
+            player.jump()
             break
     }
 })
