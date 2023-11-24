@@ -15,23 +15,31 @@ canvas.style.bottom = 0;
 canvas.style.left = 0;
 canvas.style.right = 0;
 
-const setupLevels = true
+// For level setup
+const setupLevels = false
+var setupLines = [] // For visualizaion purposes when clicking
 var levelNum = 0
-var levelLines = [new Line(50,900,1150,900), new Line(350,500,1150,500), new Line(50, 700, 50, 900), new Line(350, 700, 350, 900), new Line(150, 200, 150, 550)]
 var logs = ''
-// logs += `// LEVEL: ${this.levelNum}\n`
 
 
-const levelZero = new Level(0, levelLines) // tmp
+const map = new Map()
+const levelZero = map.getLevels()[0] // tmp
+
 const player = new Player(50, 50, 50, 65)
 
 // Main function continuously running
 function draw(){
     ctx.clearRect(1, 1, canvas.width-2, canvas.height-2)
     
+    if(setupLevels){
+        for(let object of setupLines){
+            object.draw()
+        }
+    }
+
     // tmp
     levelZero.draw()
-    for(let object of this.levelLines){
+    for(let object of levelZero.lines){
         object.draw()
     }
 
@@ -53,15 +61,17 @@ window.addEventListener('keydown', (event) => {
 
         // stuff for setting up levels
         case 'KeyN':       
-            logs += `newLevel = new Level(${this.levelNum}, this.levelLines)\n` 
-            logs += 'levels.push(newLevel)'
+            logs += `this.newLevel = new Level(${this.levelNum}, this.levelLines)\n` 
+            logs += 'this.levels.push(this.newLevel)\n'
+            logs += 'this.levelLines = []\n'
             this.levelNum += 1
-            // console.log(this.levelNum)
             break
         case 'Delete':
-            this.levelLines.pop()
+            // todo?
+            // this.levelLines.pop()
             break
         case 'KeyL':
+            // copy this log value from console ("Copy Object") and paste into Map.js createLevels()
             console.log(logs)
             break
     }
@@ -103,9 +113,8 @@ window.addEventListener('click', (event) => {
         x2 = snappedX
         y2 = snappedY
 
-        // this.levelLines.push(new Line(x1, y1, x2, y2))
-        // logs.push(`this.levelLines.push(new Line(${x1}, ${y1}, ${x2}, ${x2}))`)
-        logs += `this.levelLines.push(new Line(${x1}, ${y1}, ${x2}, ${x2}))\n`
+        logs += `this.levelLines.push(new Line(${x1}, ${y1}, ${x2}, ${y2}))\n`
+        setupLines.push(new Line(x1, y1, x2, y2))
 
         x1 = null
         y1 = null
