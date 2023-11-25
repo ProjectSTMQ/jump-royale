@@ -2,10 +2,10 @@ class Player{
     constructor(x, y, width, height){
         this.x = x
         this.y = y
-        this.onPlatform = false
-
         this.velocity = { x: 0, y: 0 }
+        this.onPlatform = false        
 
+        // STILL NEEDS TUNING
         this.gravity = 0.1
         this.maxVerticalSpeed = 20
 
@@ -15,8 +15,12 @@ class Player{
         this.leftHeld = false
         this.rightHeld = false
         this.jumpHeld = false
-        this.jumpStrength = 5
-        this.maxJumpStrength = 10
+
+
+        // STILL NEEDS TUNING
+        this.jumpStrength = 0 // Dynamically changes
+        this.jumpIncreaseSpeed = 0.3
+        this.maxJumpStrength = 9
 
         // this.isJumping = false
 
@@ -138,7 +142,7 @@ class Player{
 
     updateJumpStrength(){
         if(this.onPlatform && this.jumpHeld && this.jumpStrength < this.maxJumpStrength){
-            this.jumpStrength = Math.min(this.jumpStrength + 0.1, this.maxJumpStrength) 
+            this.jumpStrength = Math.min(this.jumpStrength + this.jumpIncreaseSpeed, this.maxJumpStrength) 
         }
     }
 
