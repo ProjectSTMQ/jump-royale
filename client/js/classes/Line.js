@@ -28,8 +28,8 @@ class Line{
     ensurePointsAreInOrder() {
         if(this.isHorizontal || this.isVertical){
             if(this.x1 > this.x2 || this.y1 > this.y2){
-                [this.x1, this.x2] = [this.x2, this.x1]
-                [this.y1, this.y2] = [this.y2, this.y1]
+                [this.x1, this.x2] = [this.x2, this.x1];
+                [this.y1, this.y2] = [this.y2, this.y1];
             }
         }
     }

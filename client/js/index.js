@@ -162,8 +162,6 @@ if(setupLevels){
             y1 = event.offsetY
         }
         else{
-            // i have no idea why but creating vertical and horizontal lines bugs out if you make a vertical line from bottom up or a horizontal line from right to left but the other way works fine
-            // fix later i guess idk i'm bad at this
             if(creatingVertical){
                 x2 = x1
                 y2 = event.offsetY
