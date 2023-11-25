@@ -19,6 +19,7 @@ const setupLevels = false
 var setupLines = [] // For visualizaion purposes when clicking
 var setupLevelNum = 1
 var logs = ''
+var tmp_logs = [] // To store a list version of the strings pushed to logs: used for deleting lines
 var creatingHorizontal = false
 var creatingVertical = false
 var creatingDiagonal = false
@@ -70,49 +71,6 @@ window.addEventListener('keydown', (event) => {
         case 'Space':
             player.jumpHeld = true
             break
-
-        // stuff for setting up levels
-        case 'KeyN':
-            // Always have these 2 border lines on the sides
-            logs += `this.levelLines.push(new Line(0, 0, 0, ${canvas.height}))\n`
-            logs += `this.levelLines.push(new Line(${canvas.width}, 0, ${canvas.width}, ${canvas.height}))\n`
-
-            logs += `this.newLevel = new Level(${this.setupLevelNum}, this.levelLines, './imgs/levels/${this.setupLevelNum}.png')\n` 
-            logs += 'this.levels.push(this.newLevel)\n'
-            logs += 'this.levelLines = []\n'
-            this.setupLevelNum += 1
-
-            console.log(logs)
-            logs = ''
-            setupLines = []
-            this.currentLevelNum += 1
-            break
-        case 'KeyH':
-            console.log("Creating horizontal")
-            creatingHorizontal = true
-            creatingVertical = false
-            creatingDiagonal = false
-            break
-        case 'KeyV':
-            console.log("Creating vertical")
-            creatingVertical = true
-            creatingHorizontal = false
-            creatingDiagonal = false
-            break
-        case 'KeyD':
-            console.log("Creating diagonal")
-            creatingDiagonal = true
-            creatingHorizontal = false
-            creatingVertical = false
-            break
-        case 'Delete':
-            // todo?
-            // this.levelLines.pop()
-            break
-        case 'KeyL':
-            // copy this log value from console ("Copy Object") and paste into Map.js createLevels()
-            console.log(logs)
-            break
     }
 })
 
@@ -131,59 +89,134 @@ window.addEventListener('keyup', (event) => {
     }
 })
 
+// debug stuff for setting up levels
+if(setupLevels){
+    window.addEventListener('keydown', (event) => {
+        switch(event.code){
 
-let x1 = null
-let y1 = null
-let x2 = null
-let y2 = null
-// For level setup
-window.addEventListener('click', (event) => {
-    if(!setupLevels) return
+            // Go to next level to start making lines
+            case 'KeyN':
+                // Always have these 2 border lines on the sides
+                logs += `this.levelLines.push(new Line(0, 0, 0, ${canvas.height}))\n`
+                logs += `this.levelLines.push(new Line(${canvas.width}, 0, ${canvas.width}, ${canvas.height}))\n`
 
-    console.log(event.offsetX)
-    console.log(event.offsetY)
+                logs += `this.newLevel = new Level(${this.setupLevelNum}, this.levelLines, './imgs/levels/${this.setupLevelNum}.png')\n` 
+                logs += 'this.levels.push(this.newLevel)\n'
+                logs += 'this.levelLines = []\n'
+                this.setupLevelNum += 1
 
-    // First click
-    if(x1 == null && y1 == null){
-        x1 = event.offsetX
-        y1 = event.offsetY
+                console.log(logs) // !!!!! copy this log value from console ("Copy Object") and paste into Map.js createLevels() !!!!!
+
+                // Clear so we can do one level at a time
+                logs = ''
+                setupLines = []
+                tmp_logs = []
+                this.currentLevelNum += 1
+                break
+            case 'KeyH':
+                console.log("Creating horizontal")
+                creatingHorizontal = true
+                creatingVertical = false
+                creatingDiagonal = false
+                break
+            case 'KeyV':
+                console.log("Creating vertical")
+                creatingVertical = true
+                creatingHorizontal = false
+                creatingDiagonal = false
+                break
+            case 'KeyD':
+                console.log("Creating diagonal")
+                creatingDiagonal = true
+                creatingHorizontal = false
+                creatingVertical = false
+                break
+            case 'Delete':
+                logs = logs.replace(tmp_logs.pop(), '')
+                setupLines.pop()
+                break
+            case 'KeyL':
+                // debug to check what lines have been pushed to the log
+                console.log("Number of lines: " + setupLines.length)
+                console.log(logs)
+                break
+        }
+    })
+
+    function getQuadrant(origin_x1, origin_y1, x1, y1){
+        if(x1 > origin_x1 && y1 < origin_y1) return 1
+        if(x1 < origin_x1 && y1 < origin_y1) return 2
+        if(x1 < origin_x1 && y1 > origin_y1) return 3
+        if(x1 > origin_x1 && y1 > origin_y1) return 4
+        else return 0
     }
-    else{
-        if(creatingVertical){
-            console.log("adjusting to vertical")
-            x2 = x1
-            y2 = event.offsetY
-            console.log("new x2: " + x2)
-        }
-        if(creatingHorizontal){
-            console.log("adjusting to horizontal")
-            y2 = y1
-            x2 = event.offsetX
-            console.log("new y2: " + y2)
-        }
-        
-        let line = new Line(x1, y1, x2, y2)
-        console.log(line)
-        // TODO - better checking and line setup stuff
-        if(line.isDiagonal || line.isHorizontal || line.isVertical){
-            logs += `this.levelLines.push(new Line(${x1}, ${y1}, ${x2}, ${y2}))\n`
-            setupLines.push(line)
+
+    let x1 = null
+    let y1 = null
+    let x2 = null
+    let y2 = null
+    window.addEventListener('click', (event) => {
+        // First click
+        if(x1 == null && y1 == null){
+            x1 = event.offsetX
+            y1 = event.offsetY
         }
         else{
-            console.log("INVALID LINE")
+            // i have no idea why but creating vertical and horizontal lines bugs out if you make a vertical line from bottom up or a horizontal line from right to left but the other way works fine
+            // fix later i guess idk i'm bad at this
+            if(creatingVertical){
+                x2 = x1
+                y2 = event.offsetY
+            }
+            if(creatingHorizontal){
+                y2 = y1
+                x2 = event.offsetX
+            }
+            if(creatingDiagonal){
+                x2 = event.offsetX
+                y2 = event.offsetY
+                let q = getQuadrant(x1, y1, x2, y2)
+
+                // let's just say always use the x coordinate and adjust y coordinate accordingly so it's a valid diagonal line
+                switch(q){
+                    case 0:
+                        console.log("wyd here you clicked the same point bro")
+                        break
+                    // adjust y +- depending on the quadrant
+                    case 1:
+                    case 2:
+                        y2 = y1 - Math.abs(x1 - x2)
+                        break
+                    case 3:
+                    case 4:
+                        y2 = y1 + Math.abs(x1 - x2)
+                        break
+                }
+            }
+            
+            let line = new Line(x1, y1, x2, y2)
+            console.log(line)
+            // TODO - better checking and line setup stuff
+            if(line.isDiagonal || line.isHorizontal || line.isVertical){
+                logs += `this.levelLines.push(new Line(${x1}, ${y1}, ${x2}, ${y2}))\n`
+                tmp_logs.push(`this.levelLines.push(new Line(${x1}, ${y1}, ${x2}, ${y2}))\n`)
+                setupLines.push(line)
+            }
+            else{
+                console.log("INVALID LINE")
+            }
+
+            x1 = null
+            y1 = null
+            x2 = null
+            y2 = null
+
+            creatingHorizontal = false
+            creatingVertical = false
+            creatingDiagonal = false
         }
+    })
+}
 
-        x1 = null
-        y1 = null
-        x2 = null
-        y2 = null
-
-        // console.log("Resetting flags")
-        creatingHorizontal = false
-        creatingVertical = false
-        creatingDiagonal = false
-    }
-})
-
-if(!setupLevels) draw()
-else levelSetup()
+if(setupLevels) levelSetup()
+else draw()
