@@ -75,6 +75,9 @@ window.addEventListener('keydown', (event) => {
             logs += 'this.levels.push(this.newLevel)\n'
             logs += 'this.levelLines = []\n'
             this.setupLevelNum += 1
+
+            setupLines = []
+            this.currentLevelNum += 1
             break
         case 'Delete':
             // todo?
@@ -111,8 +114,8 @@ let y2 = null
 window.addEventListener('click', (event) => {
     if(!setupLevels) return
 
-    let snappedX = event.offsetX //- event.offsetX % 20;
-    let snappedY = event.offsetY //- event.offsetY % 20;
+    let snappedX = event.offsetX - event.offsetX % 20;
+    let snappedY = event.offsetY - event.offsetY % 20;
 
     // First click
     if(x1 == null && y1 == null){
@@ -123,13 +126,20 @@ window.addEventListener('click', (event) => {
         x2 = snappedX
         y2 = snappedY
 
-        logs += `this.levelLines.push(new Line(${x1}, ${y1}, ${x2}, ${y2}))\n`
-        setupLines.push(new Line(x1, y1, x2, y2))
+        let line = new Line(x1, y1, x2, y2)
+        // TODO - better checking and line setup stuff
+        if(line.isDiagonal || line.isHorizontal || line.isVertical){
+            logs += `this.levelLines.push(new Line(${x1}, ${y1}, ${x2}, ${y2}))\n`
+            setupLines.push(line)
 
-        x1 = null
-        y1 = null
-        x2 = null
-        y2 = null
+            x1 = null
+            y1 = null
+            x2 = null
+            y2 = null
+        }
+        else{
+            console.log("INVALID LINE")
+        }
     }
 })
 
