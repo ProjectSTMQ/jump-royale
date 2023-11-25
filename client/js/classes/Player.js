@@ -69,18 +69,34 @@ class Player{
         let chosenLine
 
         let i = 0
-        while(i < currentLines.length && collidedLines < 2){
+        while(i < currentLines.length && collidedLines.length < 2){
             if(this.isCollidingWithLine(currentLines[i])) {
                
                 collidedLines.push(currentLines[i])
+                
             }
 
             i++
         }
 
+       
+
         if(collidedLines.length > 0 ){
-            if(collidedLines == 2){
-                //to do maje chosenLine equal to currentLines[i] with least amount of correction 
+            if(collidedLines.length == 2){
+
+                //console.log((collidedLines[0].isHorizontal? collidedLines[0] : collidedLines[1]) )
+
+                var lineHoriz = collidedLines[0].isHorizontal? collidedLines[0] : collidedLines[1]
+                var lineVert = collidedLines[0].isVertical? collidedLines[0] : collidedLines[1]
+
+                
+                var yCorrection = Math.abs(this.y + this.height - lineHoriz.y1)
+            
+                var xCorrection = Math.min( Math.abs(this.x - lineVert.x1) , Math.abs(this.x + this.width - lineVert.x1))
+
+                chosenLine =  ( yCorrection < xCorrection )? lineHoriz : lineVert
+           
+                
             }
             else{
                 chosenLine = collidedLines[0]
@@ -98,8 +114,9 @@ class Player{
     }
 
     handleCollision(line){
+
         if(line.isHorizontal){
-            console.log("horiz")
+        
             if((this.velocity.y > 0) && !this.onPlatform){
                 this.onPlatform = true
                 this.y = line.y1 - this.height
@@ -111,13 +128,11 @@ class Player{
             }
         }
         else if(line.isVertical){
-            if(this.velocity.x > 0){
-                console.log("fuck2")
-                this.x = line.x1 - this.width
-            }
-            else{
-                this.x = line.x1
-            }
+           
+              
+            this.x = (this.velocity.x > 0)? line.x1 - this.width : line.x1;
+            
+        
             this.velocity.x = -this.velocity.x
         }
     }
