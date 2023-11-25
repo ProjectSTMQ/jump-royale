@@ -29,7 +29,7 @@ class Player{
 
     update(){
         this.draw()
-        let currentLines = levelZero.lines
+        let currentLines = currentLevel.lines
         this.checkLineCollisions(currentLines)  
         this.applyPlayerMovement()
         this.updateJumpStrength()        
@@ -64,18 +64,14 @@ class Player{
 
 
     checkLineCollisions(currentLines){
-
         let collidedLines = []
         let chosenLine
 
         let i = 0
         while(i < currentLines.length && collidedLines.length < 2){
             if(this.isCollidingWithLine(currentLines[i])) {
-               
                 collidedLines.push(currentLines[i])
-                
             }
-
             i++
         }
 
@@ -83,20 +79,13 @@ class Player{
 
         if(collidedLines.length > 0 ){
             if(collidedLines.length == 2){
+                var lineHoriz = collidedLines[0].isHorizontal ? collidedLines[0] : collidedLines[1]
+                var lineVert = collidedLines[0].isVertical ? collidedLines[0] : collidedLines[1]
 
-                //console.log((collidedLines[0].isHorizontal? collidedLines[0] : collidedLines[1]) )
-
-                var lineHoriz = collidedLines[0].isHorizontal? collidedLines[0] : collidedLines[1]
-                var lineVert = collidedLines[0].isVertical? collidedLines[0] : collidedLines[1]
-
-                
                 var yCorrection = Math.abs(this.y + this.height - lineHoriz.y1)
-            
                 var xCorrection = Math.min( Math.abs(this.x - lineVert.x1) , Math.abs(this.x + this.width - lineVert.x1))
 
-                chosenLine =  ( yCorrection < xCorrection )? lineHoriz : lineVert
-           
-                
+                chosenLine =  ( yCorrection < xCorrection ) ? lineHoriz : lineVert
             }
             else{
                 chosenLine = collidedLines[0]
@@ -106,33 +95,23 @@ class Player{
         }
         else{
             this.onPlatform = false
-        }
-
-        
-        
-       
+        } 
     }
 
     handleCollision(line){
-
         if(line.isHorizontal){
-        
             if((this.velocity.y > 0) && !this.onPlatform){
                 this.onPlatform = true
                 this.y = line.y1 - this.height
             }
             else{
-                this.velocity.y = -this.velocity.y /3
+                this.velocity.y = -this.velocity.y / 3
                 this.y = line.y1        
                 this.y += this.velocity.y
             }
         }
         else if(line.isVertical){
-           
-              
-            this.x = (this.velocity.x > 0)? line.x1 - this.width : line.x1;
-            
-        
+            this.x = (this.velocity.x > 0) ? line.x1 - this.width : line.x1;
             this.velocity.x = -this.velocity.x
         }
     }

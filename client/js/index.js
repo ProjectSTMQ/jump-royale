@@ -3,7 +3,7 @@ const ctx = canvas.getContext("2d")
 
 // Set borders
 canvas.width = 1200
-canvas.height = 950
+canvas.height = 900
 ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
 // Centre canvas
@@ -18,23 +18,27 @@ canvas.style.right = 0;
 // For level setup
 const setupLevels = false
 var setupLines = [] // For visualizaion purposes when clicking
-var levelNum = 0
+var setupLevelNum = 1
 var logs = ''
 
 
 const map = new Map()
-const levelZero = map.getLevels()[0] // tmp
+var currentLevel
+var currentLevelNum = 1
 
 // tmp
-// var backgroundImg = new Image();
-// backgroundImg.src = levelZero.image;
+var backgroundImg = new Image();
 
 const player = new Player(50, 50, 50, 65)
 
 // Main function continuously running
 function draw(){
     ctx.clearRect(1, 1, canvas.width-2, canvas.height-2)
-    // ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+
+    map.checkAdvanceLevel()
+    currentLevel = map.levels[currentLevelNum - 1]
+    backgroundImg.src = currentLevel.image;
+    ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
     
     if(setupLevels){
         for(let object of setupLines){
@@ -42,11 +46,8 @@ function draw(){
         }
     }
 
-    // tmp
-    levelZero.draw()
-    for(let object of levelZero.lines){
-        object.draw()
-    }
+    // tmp to draw level lines, not actually necessary later
+    currentLevel.draw()
 
     player.update()
     requestAnimationFrame(draw)
@@ -65,11 +66,15 @@ window.addEventListener('keydown', (event) => {
             break
 
         // stuff for setting up levels
-        case 'KeyN':       
-            logs += `this.newLevel = new Level(${this.levelNum}, this.levelLines)\n` 
+        case 'KeyN':
+            // Always have these 2 border lines on the sides
+            logs += `this.levelLines.push(new Line(0, 0, 0, ${canvas.height}))\n`
+            logs += `this.levelLines.push(new Line(${canvas.width}, 0, ${canvas.width}, ${canvas.height}))\n`
+
+            logs += `this.newLevel = new Level(${this.setupLevelNum}, this.levelLines, './imgs/levels/${this.setupLevelNum}.png')\n` 
             logs += 'this.levels.push(this.newLevel)\n'
             logs += 'this.levelLines = []\n'
-            this.levelNum += 1
+            this.setupLevelNum += 1
             break
         case 'Delete':
             // todo?
