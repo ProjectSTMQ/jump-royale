@@ -28,7 +28,6 @@ const map = new Map()
 var currentLevel
 var currentLevelNum = 1
 
-// tmp
 var backgroundImg = new Image();
 
 const player = new Player(50, 50, 50, 65)
@@ -42,8 +41,7 @@ function draw(){
     backgroundImg.src = currentLevel.image;
     ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
 
-    // tmp to draw level lines, not actually necessary later
-    currentLevel.draw()
+    // currentLevel.draw() // show level lines
 
     player.update()
     requestAnimationFrame(draw)

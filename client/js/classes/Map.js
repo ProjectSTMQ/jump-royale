@@ -33,7 +33,6 @@ class Map{
         // this.levels.push(this.newLevel)
         // this.levelLines = []
 
-        // // tmp
         // this.levelLines.push(new Line(320, 820, 880, 820))
         // this.levelLines.push(new Line(0, 0, 0, 900))
         // this.levelLines.push(new Line(1200, 0, 1200, 900))
