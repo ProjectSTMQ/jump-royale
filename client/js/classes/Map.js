@@ -1783,7 +1783,7 @@ class Map {
 
     // Called from main draw() loop in index.js
     checkAdvanceLevel() {
-        if (player.y < 0) {
+        if (player.y + player.height < 0) {
             currentLevelNum += 1;
             player.y = canvas.height;
         } else if (player.y > canvas.height) {
