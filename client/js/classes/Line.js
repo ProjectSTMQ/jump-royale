@@ -14,10 +14,14 @@ class Line{
     }
 
     draw() {
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 3
         ctx.beginPath();
         ctx.moveTo(this.x1, this.y1);
         ctx.lineTo(this.x2, this.y2);
         ctx.stroke();
+        ctx.lineWidth = 1
+        ctx.strokeStyle = "black";
     }
 
     // x1 <= x2 and y1 <= y2 for when we check for player collisions in isCollidingWithLine()

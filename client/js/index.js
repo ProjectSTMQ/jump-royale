@@ -4,7 +4,6 @@ const ctx = canvas.getContext("2d")
 // Set borders
 canvas.width = 1200
 canvas.height = 900
-ctx.strokeRect(0, 0, canvas.width, canvas.height);
 
 // Centre canvas
 canvas.style.display = "block";
@@ -20,6 +19,9 @@ const setupLevels = false
 var setupLines = [] // For visualizaion purposes when clicking
 var setupLevelNum = 1
 var logs = ''
+var creatingHorizontal = false
+var creatingVertical = false
+var creatingDiagonal = false
 
 
 const map = new Map()
@@ -33,18 +35,12 @@ const player = new Player(50, 50, 50, 65)
 
 // Main function continuously running
 function draw(){
-    ctx.clearRect(1, 1, canvas.width-2, canvas.height-2)
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
 
     map.checkAdvanceLevel()
     currentLevel = map.levels[currentLevelNum - 1]
     backgroundImg.src = currentLevel.image;
     ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
-    
-    if(setupLevels){
-        for(let object of setupLines){
-            object.draw()
-        }
-    }
 
     // tmp to draw level lines, not actually necessary later
     currentLevel.draw()
@@ -53,12 +49,24 @@ function draw(){
     requestAnimationFrame(draw)
 }
 
+function levelSetup(){
+    ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+    backgroundImg.src = './imgs/levels/' + this.setupLevelNum + '.png'
+    ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+
+    for(let object of setupLines){
+        object.draw()
+    }
+    requestAnimationFrame(levelSetup)
+}
+
 window.addEventListener('keydown', (event) => {
     switch(event.code) {
-        case 'KeyA':
+        case 'ArrowLeft':
             player.leftHeld = true
             break
-        case 'KeyD':
+        case 'ArrowRight':
             player.rightHeld = true
             break
         case 'Space':
@@ -76,8 +84,28 @@ window.addEventListener('keydown', (event) => {
             logs += 'this.levelLines = []\n'
             this.setupLevelNum += 1
 
+            console.log(logs)
+            logs = ''
             setupLines = []
             this.currentLevelNum += 1
+            break
+        case 'KeyH':
+            console.log("Creating horizontal")
+            creatingHorizontal = true
+            creatingVertical = false
+            creatingDiagonal = false
+            break
+        case 'KeyV':
+            console.log("Creating vertical")
+            creatingVertical = true
+            creatingHorizontal = false
+            creatingDiagonal = false
+            break
+        case 'KeyD':
+            console.log("Creating diagonal")
+            creatingDiagonal = true
+            creatingHorizontal = false
+            creatingVertical = false
             break
         case 'Delete':
             // todo?
@@ -92,10 +120,10 @@ window.addEventListener('keydown', (event) => {
 
 window.addEventListener('keyup', (event) => {
     switch(event.code) {
-        case 'KeyA':
+        case 'ArrowLeft':
             player.leftHeld = false
             break
-        case 'KeyD':
+        case 'ArrowRight':
             player.rightHeld = false
             break
         case 'Space':
@@ -114,33 +142,50 @@ let y2 = null
 window.addEventListener('click', (event) => {
     if(!setupLevels) return
 
-    let snappedX = event.offsetX - event.offsetX % 20;
-    let snappedY = event.offsetY - event.offsetY % 20;
+    console.log(event.offsetX)
+    console.log(event.offsetY)
 
     // First click
     if(x1 == null && y1 == null){
-        x1 = snappedX
-        y1 = snappedY
+        x1 = event.offsetX
+        y1 = event.offsetY
     }
     else{
-        x2 = snappedX
-        y2 = snappedY
-
+        if(creatingVertical){
+            console.log("adjusting to vertical")
+            x2 = x1
+            y2 = event.offsetY
+            console.log("new x2: " + x2)
+        }
+        if(creatingHorizontal){
+            console.log("adjusting to horizontal")
+            y2 = y1
+            x2 = event.offsetX
+            console.log("new y2: " + y2)
+        }
+        
         let line = new Line(x1, y1, x2, y2)
+        console.log(line)
         // TODO - better checking and line setup stuff
         if(line.isDiagonal || line.isHorizontal || line.isVertical){
             logs += `this.levelLines.push(new Line(${x1}, ${y1}, ${x2}, ${y2}))\n`
             setupLines.push(line)
-
-            x1 = null
-            y1 = null
-            x2 = null
-            y2 = null
         }
         else{
             console.log("INVALID LINE")
         }
+
+        x1 = null
+        y1 = null
+        x2 = null
+        y2 = null
+
+        // console.log("Resetting flags")
+        creatingHorizontal = false
+        creatingVertical = false
+        creatingDiagonal = false
     }
 })
 
-draw()
+if(!setupLevels) draw()
+else levelSetup()
