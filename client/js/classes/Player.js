@@ -27,7 +27,8 @@ class Player {
     }
 
     draw() {
-        ctx.strokeRect(this.x, this.y, this.width, this.height);
+        ctx.fillStyle = "purple"
+        ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
     update() {

@@ -41,7 +41,7 @@ function draw() {
     backgroundImg.src = currentLevel.image;
     ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
 
-    currentLevel.draw() // show level lines
+    // currentLevel.draw() // optional show level lines
 
     player.update();
     requestAnimationFrame(draw);
