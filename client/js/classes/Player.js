@@ -8,8 +8,10 @@ class Player {
         // STILL NEEDS TUNING
         this.gravity = 0.15;
         this.maxVerticalSpeed = 20;
-        this.lateralJumpingSpeed = 3;
+        this.lateralJumpingSpeed = 4;
         this.playerMovementSpeed = 2;
+
+        this.justBouncedOffWall = false
 
         this.width = width;
         this.height = height;
@@ -33,8 +35,6 @@ class Player {
 
     update() {
         this.draw();
-       
-        console.log(this.jumpStrength)
         let currentLines = currentLevel.lines;
         this.checkLineCollisions(currentLines);
         this.applyPlayerMovement();
@@ -51,10 +51,13 @@ class Player {
             this.velocity.x = 0;
         }
 
-        if (this.isJumping && this.isMovingRight()){
-            this.velocity.x = this.lateralJumpingSpeed;
-        } else if (this.isJumping && this.isMovingLeft()){
-            this.velocity.x = -this.lateralJumpingSpeed;
+        // lateralJumpingSpeed is different if you just bounced off a wall compared to a normal jump
+        if(!this.justBouncedOffWall){
+            if (this.isJumping && this.isMovingRight()){
+                this.velocity.x = this.lateralJumpingSpeed;
+            } else if (this.isJumping && this.isMovingLeft()){
+                this.velocity.x = -this.lateralJumpingSpeed;
+            }
         }
 
         if (!this.jumpHeld) {
@@ -132,8 +135,7 @@ class Player {
     handleCollision(line) {
        
         if (line.isHorizontal) {
-           
-            //console.log(this.velocity.y)
+            this.justBouncedOffWall = false;
             if (this.velocity.y >= 0 && !this.onPlatform) {
                 this.onPlatform = true;
                 this.isJumping = false;
@@ -145,7 +147,8 @@ class Player {
             }
         } else if (line.isVertical) {
             this.x = this.velocity.x > 0 ? line.x1 - this.width : line.x1;
-            this.velocity.x = -this.velocity.x;
+            this.velocity.x = -(this.velocity.x / 2); // Dull and invert x velocity when we bounce off a wall
+            this.justBouncedOffWall = true
         }
     }
 
@@ -186,7 +189,6 @@ class Player {
             this.jumpHeld &&
             this.jumpStrength < this.maxJumpStrength
         ) {
-            console.log("jump")
             this.jumpStrength = Math.min(
                 this.jumpStrength + this.jumpIncreaseSpeed,
                 this.maxJumpStrength
