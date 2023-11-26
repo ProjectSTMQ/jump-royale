@@ -99,6 +99,7 @@ class Player {
 
         if (collidedLines.length > 0) {
             if (collidedLines.length == 2) {
+              
                 var lineHoriz = collidedLines[0].isHorizontal
                     ? collidedLines[0]
                     : collidedLines[1];
@@ -124,9 +125,11 @@ class Player {
             } else {
                 chosenLine = collidedLines[0];
             }
+            
            
             this.handleCollision(chosenLine);
-        } else {
+        } 
+        else {
             this.onPlatform = false;
         }
        
@@ -146,9 +149,13 @@ class Player {
                 this.y += this.velocity.y;
             }
         } else if (line.isVertical) {
+            console.log("vert")
             this.x = this.velocity.x > 0 ? line.x1 - this.width : line.x1;
             this.velocity.x = -(this.velocity.x / 2); // Dull and invert x velocity when we bounce off a wall
             this.justBouncedOffWall = true
+        }
+        else{
+            console.log("dab")
         }
     }
 
@@ -166,7 +173,9 @@ class Player {
 
             isPlayerWithinLineY =
                 this.y < line.y1 && line.y1 <= this.y + this.height;
-        } else if (line.isVertical) {
+        } 
+        else if (line.isVertical) {
+            
             isPlayerWithinLineY =
                 (line.y1 < this.y && this.y < line.y2) ||
                 (line.y1 < this.y + this.height &&
@@ -176,6 +185,19 @@ class Player {
 
             isPlayerWithinLineX =
                 this.x < line.x1 && line.x1 < this.x + this.width;
+        }
+        else{
+          
+            isPlayerWithinLineX = (line.x1 < this.x && this.x < line.x2) || (line.x1 < this.x + this.width && this.x + this.width < line.x2) ||
+            (this.x < line.x1 && line.x1 < this.x + this.width) ||
+            (this.x < line.x2 && line.x2 < this.x + this.width);
+
+            isPlayerWithinLineY =
+            (line.y1 < this.y && this.y < line.y2) ||
+            (line.y1 < this.y + this.height &&
+                this.y + this.height < line.y2) ||
+            (this.y < line.y1 && line.y1 < this.y + this.height) ||
+            (this.y < line.y2 && line.y2 < this.y + this.height);
         }
 
         return isPlayerWithinLineX && isPlayerWithinLineY;
