@@ -61,10 +61,10 @@ function levelSetup() {
 
 window.addEventListener("keydown", (event) => {
     switch (event.code) {
-        case "ArrowLeft":
+        case "KeyA":
             player.leftHeld = true;
             break;
-        case "ArrowRight":
+        case "KeyD":
             player.rightHeld = true;
             break;
         case "Space":
@@ -75,10 +75,10 @@ window.addEventListener("keydown", (event) => {
 
 window.addEventListener("keyup", (event) => {
     switch (event.code) {
-        case "ArrowLeft":
+        case "KeyA":
             player.leftHeld = false;
             break;
-        case "ArrowRight":
+        case "KeyD":
             player.rightHeld = false;
             break;
         case "Space":
@@ -123,7 +123,7 @@ if (setupLevels) {
                 creatingHorizontal = false;
                 creatingDiagonal = false;
                 break;
-            case "KeyD":
+            case "KeyF":
                 console.log("Creating diagonal");
                 creatingDiagonal = true;
                 creatingHorizontal = false;
