@@ -9,6 +9,7 @@ class Player {
         this.maxVerticalSpeed = 20;
         this.lateralJumpingSpeed = 4;
         this.playerMovementSpeed = 2;
+        this.diagonalSlideSpeed = 2;
 
         this.justBouncedOffWall = false
 
@@ -152,6 +153,24 @@ class Player {
             this.x = this.velocity.x > 0 ? line.x1 - this.width : line.x1;
             this.velocity.x = -(this.velocity.x / 2); // Dull and invert x velocity when we bounce off a wall
             this.justBouncedOffWall = true
+        } else if (line.isDiagonal) {
+
+            // Calculate the y value of the diagonal line
+            let slope = (line.y2 - line.y1) / (line.x2 - line.x1);
+            let yIntercept = line.y1 - slope * line.x1;
+            let collisionY = slope * this.x + yIntercept;
+
+            // console.log(collisionY);
+            this.y = collisionY - this.height;
+            this.x += this.diagonalSlideSpeed / 10;
+            this.y += this.diagonalSlideSpeed / 10;
+
+            // this.velocity.x = slideSpeed / 10;
+            // this.velocity.y = slideSpeed / 10;
+
+            this.isJumping = false;
+            this.onPlatform = true;
+            this.justBouncedOffWall = false;
         }
         else{
             console.log("dab")
