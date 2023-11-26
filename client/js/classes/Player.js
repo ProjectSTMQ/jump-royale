@@ -5,7 +5,6 @@ class Player {
         this.velocity = { x: 0, y: 0 };
         this.onPlatform = false;
 
-        // STILL NEEDS TUNING
         this.gravity = 0.15;
         this.maxVerticalSpeed = 20;
         this.lateralJumpingSpeed = 4;
@@ -20,11 +19,11 @@ class Player {
         this.rightHeld = false;
         this.jumpHeld = false;
 
-        // STILL NEEDS TUNING
-        this.baseJumpStrength = 2; // Minimum jump strength
+        // Tuning this stuff is hard idek if this works - maybe gravity has to change and all this is irrelevant idk
+        this.baseJumpStrength = 2.7; // Minimum jump strength
         this.jumpStrength = this.baseJumpStrength; // Dynamically changes
-        this.jumpIncreaseSpeed = 0.3; // Speed at which jump strength increases as you hold
-        this.maxJumpStrength = 10.5; // Maximum power we can jump
+        this.jumpIncreaseSpeed = 0.16; // Speed at which jump strength increases as you hold
+        this.maxJumpStrength = 10.8; // Maximum power we can jump
         this.isJumping = false;
     }
 
