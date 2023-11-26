@@ -6,7 +6,7 @@ class Player {
         this.onPlatform = false;
 
         // STILL NEEDS TUNING
-        this.gravity = 0.2;
+        this.gravity = 0.15;
         this.maxVerticalSpeed = 20;
         this.lateralJumpingSpeed = 3;
         this.playerMovementSpeed = 2;
@@ -21,8 +21,8 @@ class Player {
         // STILL NEEDS TUNING
         this.baseJumpStrength = 2; // Minimum jump strength
         this.jumpStrength = this.baseJumpStrength; // Dynamically changes
-        this.jumpIncreaseSpeed = 0.2; // Speed at which jump strength increases as you hold
-        this.maxJumpStrength = 10; // Maximum power we can jump
+        this.jumpIncreaseSpeed = 0.3; // Speed at which jump strength increases as you hold
+        this.maxJumpStrength = 10.5; // Maximum power we can jump
         this.isJumping = false;
     }
 
