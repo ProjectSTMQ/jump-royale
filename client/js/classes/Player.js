@@ -6,8 +6,10 @@ class Player {
         this.onPlatform = false;
 
         // STILL NEEDS TUNING
-        this.gravity = 0.1;
+        this.gravity = 0.15;
         this.maxVerticalSpeed = 20;
+        this.lateralJumpingSpeed = 3;
+        this.playerMovementSpeed = 2;
 
         this.width = width;
         this.height = height;
@@ -17,13 +19,11 @@ class Player {
         this.jumpHeld = false;
 
         // STILL NEEDS TUNING
-        this.jumpStrength = 2; // Dynamically changes
-        this.jumpIncreaseSpeed = 0.3;
-        this.maxJumpStrength = 9;
-
-        // this.isJumping = false
-
-        this.playerMovementSpeed = 2;
+        this.baseJumpStrength = 2; // Minimum jump strength
+        this.jumpStrength = this.baseJumpStrength; // Dynamically changes
+        this.jumpIncreaseSpeed = 0.3; // Speed at which jump strength increases as you hold
+        this.maxJumpStrength = 10.5; // Maximum power we can jump
+        this.isJumping = false;
     }
 
     draw() {
@@ -51,9 +51,23 @@ class Player {
             this.velocity.x = 0;
         }
 
+        if (this.isJumping && this.isMovingRight()){
+            this.velocity.x = this.lateralJumpingSpeed;
+        } else if (this.isJumping && this.isMovingLeft()){
+            this.velocity.x = -this.lateralJumpingSpeed;
+        }
+
         if (!this.jumpHeld) {
             this.x += this.velocity.x;
         }
+    }
+
+    isMovingLeft() {
+        return this.velocity.x < 0;
+    }
+
+    isMovingRight() {
+        return this.velocity.x > 0;
     }
 
     applyGravity() {
@@ -122,6 +136,7 @@ class Player {
             //console.log(this.velocity.y)
             if (this.velocity.y >= 0 && !this.onPlatform) {
                 this.onPlatform = true;
+                this.isJumping = false;
                 this.y = line.y1 - this.height;
             } else if(this.velocity.y < 0){
                 this.velocity.y = -this.velocity.y / 3;
@@ -180,14 +195,10 @@ class Player {
     }
 
     jump() {
-     
-        if(this.onPlatform){
-            console.log("jump")
-            this.velocity.y = -this.jumpStrength;
-            this.jumpStrength = 2;
-            this.y += this.velocity.y;
-            this.onPlatform = false;
-        }
-       
+        this.velocity.y = -this.jumpStrength;
+        this.jumpStrength = this.baseJumpStrength;
+        this.y += this.velocity.y;
+        this.onPlatform = false;
+        this.isJumping = true;
     }
 }
