@@ -50,6 +50,7 @@ class Map {
         this.levelLines.push(new Line(965, 310, 965, 460))
 
         this.levelLines.push(new Line(320, 745, 395, 820))
+        this.levelLines.push(new Line(880, 650, 710, 820))
 
         
         
