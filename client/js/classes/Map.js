@@ -39,6 +39,21 @@ class Map {
         // this.levels.push(this.newLevel)
         // this.levelLines = []
 
+
+        // tmp diagonal lines stuff for michael (stinky) to test
+        this.levelLines.push(new Line(20, 225, 145, 225))
+        this.levelLines.push(new Line(145, 225, 235, 315))
+        this.levelLines.push(new Line(235, 315, 235, 460))
+
+        this.levelLines.push(new Line(1050, 225, 1180, 225))
+        this.levelLines.push(new Line(1050, 225, 965, 310))
+        this.levelLines.push(new Line(965, 310, 965, 460))
+
+        this.levelLines.push(new Line(320, 745, 395, 820))
+
+        
+        
+
         this.levelLines.push(new Line(20, 0, 20, 460));
         this.levelLines.push(new Line(20, 460, 320, 460));
         this.levelLines.push(new Line(320, 460, 320, 820));
