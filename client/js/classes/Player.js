@@ -17,7 +17,7 @@ class Player {
         this.jumpHeld = false;
 
         // STILL NEEDS TUNING
-        this.jumpStrength = 0; // Dynamically changes
+        this.jumpStrength = 2; // Dynamically changes
         this.jumpIncreaseSpeed = 0.3;
         this.maxJumpStrength = 9;
 
@@ -33,6 +33,8 @@ class Player {
 
     update() {
         this.draw();
+       
+        console.log(this.jumpStrength)
         let currentLines = currentLevel.lines;
         this.checkLineCollisions(currentLines);
         this.applyPlayerMovement();
@@ -87,31 +89,43 @@ class Player {
                     ? collidedLines[0]
                     : collidedLines[1];
 
-                var yCorrection = Math.abs(this.y + this.height - lineHoriz.y1);
-                var xCorrection = Math.min(
-                    Math.abs(this.x - lineVert.x1),
-                    Math.abs(this.x + this.width - lineVert.x1)
-                );
 
-                chosenLine = yCorrection < xCorrection ? lineHoriz : lineVert;
+                if(this.velocity.y == 0){
+                    chosenLine = lineVert
+                }
+                else{
+                    var yCorrection = Math.min(Math.abs(this.y + this.height - lineHoriz.y1), Math.abs(this.y - lineHoriz.y1));
+                    var xCorrection = Math.min(
+                        Math.abs(this.x - lineVert.x1),
+                        Math.abs(this.x + this.width - lineVert.x1)
+                    );
+    
+                    chosenLine = yCorrection <= xCorrection ? lineHoriz : lineVert;
+                }
+              
+             
             } else {
                 chosenLine = collidedLines[0];
             }
-
+           
             this.handleCollision(chosenLine);
         } else {
             this.onPlatform = false;
         }
+       
     }
 
     handleCollision(line) {
+       
         if (line.isHorizontal) {
-            if (this.velocity.y > 0 && !this.onPlatform) {
+           
+            //console.log(this.velocity.y)
+            if (this.velocity.y >= 0 && !this.onPlatform) {
                 this.onPlatform = true;
                 this.y = line.y1 - this.height;
-            } else {
+            } else if(this.velocity.y < 0){
                 this.velocity.y = -this.velocity.y / 3;
-                this.y = line.y1;
+                this.y = line.y1 +10;
                 this.y += this.velocity.y;
             }
         } else if (line.isVertical) {
@@ -133,7 +147,7 @@ class Player {
                 (this.x < line.x2 && line.x2 < this.x + this.width);
 
             isPlayerWithinLineY =
-                this.y < line.y1 && line.y1 < this.y + this.height;
+                this.y < line.y1 && line.y1 <= this.y + this.height;
         } else if (line.isVertical) {
             isPlayerWithinLineY =
                 (line.y1 < this.y && this.y < line.y2) ||
@@ -150,11 +164,14 @@ class Player {
     }
 
     updateJumpStrength() {
+
         if (
+            
             this.onPlatform &&
             this.jumpHeld &&
             this.jumpStrength < this.maxJumpStrength
         ) {
+            console.log("jump")
             this.jumpStrength = Math.min(
                 this.jumpStrength + this.jumpIncreaseSpeed,
                 this.maxJumpStrength
@@ -163,9 +180,14 @@ class Player {
     }
 
     jump() {
-        this.velocity.y = -this.jumpStrength;
-        this.jumpStrength = 5;
-        this.y += this.velocity.y;
-        this.onPlatform = false;
+     
+        if(this.onPlatform){
+            console.log("jump")
+            this.velocity.y = -this.jumpStrength;
+            this.jumpStrength = 2;
+            this.y += this.velocity.y;
+            this.onPlatform = false;
+        }
+       
     }
 }

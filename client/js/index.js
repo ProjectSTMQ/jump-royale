@@ -41,8 +41,8 @@ function draw() {
     backgroundImg.src = currentLevel.image;
     ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
 
-    // currentLevel.draw() // optional show level lines
-
+    currentLevel.draw() // optional show level lines
+    
     player.update();
     requestAnimationFrame(draw);
 }
@@ -68,7 +68,10 @@ window.addEventListener("keydown", (event) => {
             player.rightHeld = true;
             break;
         case "Space":
-            player.jumpHeld = true;
+            if(player.onPlatform){
+                player.jumpHeld = true;
+            }
+           
             break;
     }
 });
@@ -82,8 +85,13 @@ window.addEventListener("keyup", (event) => {
             player.rightHeld = false;
             break;
         case "Space":
+            if(player.onPlatform){
             player.jumpHeld = false;
+            
             player.jump();
+        }
+            
+            
             break;
     }
 });
