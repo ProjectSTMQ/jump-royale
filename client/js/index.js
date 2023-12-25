@@ -30,6 +30,10 @@ var currentLevelNum = 1;
 
 var backgroundImg = new Image();
 
+
+
+const socket = io();
+
 const player = new Player(50, 50, 50, 65);
 
 // Main function continuously running
