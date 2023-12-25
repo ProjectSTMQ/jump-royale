@@ -9,7 +9,7 @@ class Player {
         this.maxVerticalSpeed = 20;
         this.lateralJumpingSpeed = 4;
         this.playerMovementSpeed = 2;
-        this.diagonalSlideSpeed = 2;
+        this.diagonalSlideSpeed = 3;
 
         this.justBouncedOffWall = false
 
@@ -20,11 +20,11 @@ class Player {
         this.rightHeld = false;
         this.jumpHeld = false;
 
-        // Tuning this stuff is hard idek if this works - maybe gravity has to change and all this is irrelevant idk
-        this.baseJumpStrength = 2.7; // Minimum jump strength
+        // STILL NEEDS TUNING
+        this.baseJumpStrength = 2; // Minimum jump strength
         this.jumpStrength = this.baseJumpStrength; // Dynamically changes
-        this.jumpIncreaseSpeed = 0.16; // Speed at which jump strength increases as you hold
-        this.maxJumpStrength = 10.8; // Maximum power we can jump
+        this.jumpIncreaseSpeed = 0.3; // Speed at which jump strength increases as you hold
+        this.maxJumpStrength = 10.5; // Maximum power we can jump
         this.isJumping = false;
     }
 
@@ -99,26 +99,35 @@ class Player {
 
         if (collidedLines.length > 0) {
             if (collidedLines.length == 2) {
-              
-                var lineHoriz = collidedLines[0].isHorizontal
+            
+                if(collidedLines[0].isDiagonal || collidedLines[1].isDiagonal){
+                    chosenLine = collidedLines[0].isDiagonal
                     ? collidedLines[0]
                     : collidedLines[1];
-                var lineVert = collidedLines[0].isVertical
-                    ? collidedLines[0]
-                    : collidedLines[1];
-
-
-                if(this.velocity.y == 0){
-                    chosenLine = lineVert
                 }
                 else{
-                    var yCorrection = Math.min(Math.abs(this.y + this.height - lineHoriz.y1), Math.abs(this.y - lineHoriz.y1));
-                    var xCorrection = Math.min(
-                        Math.abs(this.x - lineVert.x1),
-                        Math.abs(this.x + this.width - lineVert.x1)
-                    );
-    
-                    chosenLine = yCorrection <= xCorrection ? lineHoriz : lineVert;
+
+                    console.log("fuckz")
+                    var lineHoriz = collidedLines[0].isHorizontal
+                        ? collidedLines[0]
+                        : collidedLines[1];
+                    var lineVert = collidedLines[0].isVertical
+                        ? collidedLines[0]
+                        : collidedLines[1];
+
+
+                    if(this.velocity.y == 0){
+                        chosenLine = lineVert
+                    }
+                    else{
+                        var yCorrection = Math.min(Math.abs(this.y + this.height - lineHoriz.y1), Math.abs(this.y - lineHoriz.y1));
+                        var xCorrection = Math.min(
+                            Math.abs(this.x - lineVert.x1),
+                            Math.abs(this.x + this.width - lineVert.x1)
+                        );
+        
+                        chosenLine = yCorrection <= xCorrection ? lineHoriz : lineVert;
+                    }
                 }
               
              
@@ -138,6 +147,7 @@ class Player {
     handleCollision(line) {
        
         if (line.isHorizontal) {
+            console.log("horiz")
             this.justBouncedOffWall = false;
             if (this.velocity.y >= 0 && !this.onPlatform) {
                 this.onPlatform = true;
@@ -150,36 +160,47 @@ class Player {
             }
         } else if (line.isVertical) {
             console.log("vert")
+          
             this.x = this.velocity.x > 0 ? line.x1 - this.width : line.x1;
             this.velocity.x = -(this.velocity.x / 2); // Dull and invert x velocity when we bounce off a wall
             this.justBouncedOffWall = true
-        } else if (line.isDiagonal) {
-
-            // Calculate the y value of the diagonal line
-            let slope = (line.y2 - line.y1) / (line.x2 - line.x1);
-            let yIntercept = line.y1 - slope * line.x1;
-            let collisionY = slope * this.x + yIntercept;
-
-            // console.log(collisionY);
-            this.y = collisionY - this.height;
-            this.x += this.diagonalSlideSpeed / 10;
-            this.y += this.diagonalSlideSpeed / 10;
-
-            // this.velocity.x = slideSpeed / 10;
-            // this.velocity.y = slideSpeed / 10;
-
-            this.isJumping = false;
-            this.onPlatform = true;
-            this.justBouncedOffWall = false;
         }
         else{
-            console.log("dab")
+
+       
+            player.y = this.getDiagonalYIntersect(line) - player.height - 1
+            console.log(line.x1 +","+line.x2 +"," +line.y1 +"," + line.y2 +",")
+
+          if(line.x2 > line.x1){
+               player.velocity.x = this.diagonalSlideSpeed
+           
+          }
+          else{
+            player.velocity.x = -this.diagonalSlideSpeed
+ 
+          }
+          
+          player.velocity.y =   player.velocity.y/2
+
+           
         }
     }
 
+    getDiagonalYIntersect(line){
+
+        var slope = (line.y2 - line.y1) / (line.x2 - line.x1)
+        var y_intercept = line.y2 - slope*line.x2
+
+        return Math.min(slope*player.x + y_intercept, slope*(player.x+player.width) + y_intercept)
+
+    }
+
+
+
     isCollidingWithLine(line) {
-        var isPlayerWithinLineX;
-        var isPlayerWithinLineY;
+        var isPlayerWithinLineX = false;
+        var isPlayerWithinLineY = false;
+        var isPlayerWithinDiagonal = false;
 
         if (line.isHorizontal) {
             isPlayerWithinLineX =
@@ -205,20 +226,41 @@ class Player {
                 this.x < line.x1 && line.x1 < this.x + this.width;
         }
         else{
-          
-            isPlayerWithinLineX = (line.x1 < this.x && this.x < line.x2) || (line.x1 < this.x + this.width && this.x + this.width < line.x2) ||
-            (this.x < line.x1 && line.x1 < this.x + this.width) ||
-            (this.x < line.x2 && line.x2 < this.x + this.width);
+     
+                // calculate the distance to intersection point
+           
+            isPlayerWithinDiagonal = this.isCollidingWithDiagonal(this.x, this.x+this.width, this.y, this.y,line) ||
+                                     this.isCollidingWithDiagonal(this.x, this.x, this.y, this.y+this.height,line) ||
+                                     this.isCollidingWithDiagonal(this.x+this.width, this.x+this.width, this.y, this.y+this.height,line)
+        
 
-            isPlayerWithinLineY =
-            (line.y1 < this.y && this.y < line.y2) ||
-            (line.y1 < this.y + this.height &&
-                this.y + this.height < line.y2) ||
-            (this.y < line.y1 && line.y1 < this.y + this.height) ||
-            (this.y < line.y2 && line.y2 < this.y + this.height);
+          
+      
         }
 
-        return isPlayerWithinLineX && isPlayerWithinLineY;
+        return isPlayerWithinLineX && isPlayerWithinLineY || isPlayerWithinDiagonal;
+    }
+
+    isCollidingWithDiagonal(x1, x2, y1, y2, line){
+        let uA = ((line.x2 - line.x1) * (y1 - line.y1) - (line.y2 - line.y1) * (x1 - line.x1)) / ((line.y2 - line.y1) * (x2 - x1) - (line.x2 - line.x1) * (y2 - y1));
+        let uB = ((x2 - x1) * (y1 - line.y1) - (y2 - y1) * (x1 - line.x1)) / ((line.y2 - line.y1) * (x2 - x1) - (line.x2 - line.x1) * (y2 - y1));
+
+
+        
+        // if uA and uB are between 0-1, lines are colliding
+        if (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1) {
+      
+          // optionally, draw a circle where the lines meet
+          
+            console.log("DAB")
+           
+            return true;
+     
+      
+      
+         }
+        
+        return false;
     }
 
     updateJumpStrength() {
