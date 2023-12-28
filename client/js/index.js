@@ -2,8 +2,10 @@ const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
 // Set borders
-canvas.width = 1200;
-canvas.height = 900;
+
+const map = new Map();
+canvas.width = map.canvasWidth;
+canvas.height = map.canvasHeight;
 
 // Centre canvas
 canvas.style.display = "block";
@@ -24,7 +26,7 @@ var creatingHorizontal = false;
 var creatingVertical = false;
 var creatingDiagonal = false;
 
-const map = new Map();
+
 var currentLevel;
 var currentLevelNum = 1;
 
@@ -35,15 +37,12 @@ const frontendPlayers = {};
 
 const socket = io();
 socket.on('updatePlayers', (backendPlayers) => {
-    
+
     for(const id in backendPlayers){
         backendPlayer = backendPlayers[id];
-        if(!frontendPlayers[id]){ // If player on the backend does not exist on the frontend - ie new player has connected
-            frontendPlayers[id] = new Player(backendPlayer.x, backendPlayer.y, 50, 65);
-        }
-        else{ // updating the location of players who already exists on the frontend
-            frontendPlayers[id] = backendPlayer;
-        }
+        
+        frontendPlayers[id] = backendPlayer;
+     
     }
 
     // If player on the frontend does not exist on the backend - ie player has disconnected
@@ -64,19 +63,27 @@ function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // map.checkAdvanceLevel();
-    currentLevel = map.levels[currentLevelNum - 1];
-    backgroundImg.src = currentLevel.image; 
-    ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
-
-    currentLevel.draw() // optional show level lines
     
-    // player.update();
-    for(const id in frontendPlayers){
-        // if(frontendPlayers[id] instanceof Player){
-            frontendPlayers[id].update();
-        // }
+   
+    if( Object.keys(frontendPlayers).length){
+        backgroundImg.src = map.levels[frontendPlayers[socket.id].currentLevelNum -1].image; 
+        ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+        currentLevel = map.levels[frontendPlayers[socket.id].currentLevelNum - 1]; 
+        currentLevel.draw() // optional show level lines
+        ctx.fillStyle = "purple"
+        // player.update();
+        for(const id in frontendPlayers){
+            // if(frontendPlayers[id] instanceof Player){
+            if(frontendPlayers[id].currentLevelNum == frontendPlayers[socket.id].currentLevelNum){
+                ctx.fillRect( frontendPlayers[id].x,  frontendPlayers[id].y,  frontendPlayers[id].width,  frontendPlayers[id].height);
+            }
+        
+            // }
+        }
+       
     }
     requestAnimationFrame(draw);
+    
 }
 
 function levelSetup() {

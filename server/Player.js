@@ -55,7 +55,7 @@ class Player {
             this.currentLevelNum += 1;
             this.y = map.canvasHeight;
         } else if (this.y >  map.canvasHeight) {
-            currentLevelNum -= 1;
+            this.currentLevelNum -= 1;
             this.y = 0;
         }
     }
@@ -304,3 +304,4 @@ class Player {
     }
 }
 
+module.exports = Player

@@ -1,6 +1,8 @@
 const express = require('express')
 const app = express()
 const PORT = 5000
+const Player = require('./Player.js')
+const Map = require('./Map.js')
 
 // Socket.io server uses an http server
 const http = require('http');
@@ -12,6 +14,8 @@ const path = require('path'); // Import the 'path' module
 
 const backendPlayers = {};
 
+const map = new Map();
+
 app.use(express.static(path.join(__dirname, '../client'))); // Serve static javascript files from the 'client' folder
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../client/index.html'));
@@ -19,7 +23,13 @@ app.get('/', (req, res) => {
 
 io.on('connection', (socket) => {
     console.log('a user connected');
-    backendPlayers[socket.id] = {x: 10 + 50 * Math.random(), y: 50};
+   
+    backendPlayers[socket.id] = new Player(10 + 50 * Math.random(), 50, 50, 65, 1);
+
+    console.log( Object.getOwnPropertyNames( backendPlayers[socket.id]))
+
+
+      
     io.emit('updatePlayers', backendPlayers);
 
     socket.on('disconnect', (reason) => {
@@ -65,7 +75,13 @@ io.on('connection', (socket) => {
 })
 
 setInterval(() => {
+
+    for(const id in backendPlayers){
+       
+        backendPlayers[id].update(map)
+    }
     io.emit('updatePlayers', backendPlayers);
+
 }, 15);
 
 server.listen(PORT, () => {

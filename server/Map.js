@@ -1,3 +1,7 @@
+
+const Level = require('./Level.js')
+const Line = require('./Line.js')
+
 class Map {
     constructor() {
         this.levels = [];
@@ -5,6 +9,9 @@ class Map {
         this.levelLines = [];
         this.newLevel = null;
 
+        this.canvasWidth = 1200;
+        this.canvasHeight = 900;
+        
         this.createLevels();
     }
 
@@ -1809,3 +1816,5 @@ class Map {
 
    
 }
+
+module.exports = Map
