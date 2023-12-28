@@ -107,7 +107,7 @@ class Player {
                 }
                 else{
 
-                    console.log("fuckz")
+                    // console.log("fuckz")
                     var lineHoriz = collidedLines[0].isHorizontal
                         ? collidedLines[0]
                         : collidedLines[1];
@@ -147,7 +147,7 @@ class Player {
     handleCollision(line) {
        
         if (line.isHorizontal) {
-            console.log("horiz")
+            // console.log("horiz")
             this.justBouncedOffWall = false;
             if (this.velocity.y >= 0 && !this.onPlatform) {
                 this.onPlatform = true;
@@ -159,7 +159,7 @@ class Player {
                 this.y += this.velocity.y;
             }
         } else if (line.isVertical) {
-            console.log("vert")
+            // console.log("vert")
           
             this.x = this.velocity.x > 0 ? line.x1 - this.width : line.x1;
             this.velocity.x = -(this.velocity.x / 2); // Dull and invert x velocity when we bounce off a wall
@@ -168,19 +168,19 @@ class Player {
         else{
 
        
-            player.y = this.getDiagonalYIntersect(line) - player.height - 1
-            console.log(line.x1 +","+line.x2 +"," +line.y1 +"," + line.y2 +",")
+            this.y = this.getDiagonalYIntersect(line) - this.height - 1
+            // console.log(line.x1 +","+line.x2 +"," +line.y1 +"," + line.y2 +",")
 
           if(line.x2 > line.x1){
-               player.velocity.x = this.diagonalSlideSpeed
+               this.velocity.x = this.diagonalSlideSpeed
            
           }
           else{
-            player.velocity.x = -this.diagonalSlideSpeed
+            this.velocity.x = -this.diagonalSlideSpeed
  
           }
           
-          player.velocity.y =   player.velocity.y/2
+          this.velocity.y =   this.velocity.y/2
 
            
         }
@@ -191,7 +191,7 @@ class Player {
         var slope = (line.y2 - line.y1) / (line.x2 - line.x1)
         var y_intercept = line.y2 - slope*line.x2
 
-        return Math.min(slope*player.x + y_intercept, slope*(player.x+player.width) + y_intercept)
+        return Math.min(slope*this.x + y_intercept, slope*(this.x+this.width) + y_intercept)
 
     }
 
@@ -252,7 +252,7 @@ class Player {
       
           // optionally, draw a circle where the lines meet
           
-            console.log("DAB")
+            // console.log("DAB")
            
             return true;
      

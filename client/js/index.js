@@ -31,23 +31,51 @@ var currentLevelNum = 1;
 var backgroundImg = new Image();
 
 
+const frontendPlayers = {};
 
 const socket = io();
+socket.on('updatePlayers', (backendPlayers) => {
+    
+    for(const id in backendPlayers){
+        backendPlayer = backendPlayers[id];
+        if(!frontendPlayers[id]){ // If player on the backend does not exist on the frontend - ie new player has connected
+            frontendPlayers[id] = new Player(backendPlayer.x, backendPlayer.y, 50, 65);
+        }
+        else{ // updating the location of players who already exists on the frontend
+            frontendPlayers[id] = backendPlayer;
+        }
+    }
 
-const player = new Player(50, 50, 50, 65);
+    // If player on the frontend does not exist on the backend - ie player has disconnected
+    for(const id in frontendPlayers){
+        if(!backendPlayers[id]){
+            delete frontendPlayers[id];
+        }
+    }
+
+    // console.log(frontendPlayers);
+});
+
+
+// const player = new Player(50, 50, 50, 65);
 
 // Main function continuously running
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    map.checkAdvanceLevel();
+    // map.checkAdvanceLevel();
     currentLevel = map.levels[currentLevelNum - 1];
-    backgroundImg.src = currentLevel.image;
+    backgroundImg.src = currentLevel.image; 
     ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
 
     currentLevel.draw() // optional show level lines
     
-    player.update();
+    // player.update();
+    for(const id in frontendPlayers){
+        // if(frontendPlayers[id] instanceof Player){
+            frontendPlayers[id].update();
+        // }
+    }
     requestAnimationFrame(draw);
 }
 
@@ -66,15 +94,18 @@ function levelSetup() {
 window.addEventListener("keydown", (event) => {
     switch (event.code) {
         case "KeyA":
-            player.leftHeld = true;
+            // player.leftHeld = true;
+            socket.emit('keydown', 'KeyA');
             break;
         case "KeyD":
-            player.rightHeld = true;
+            // player.rightHeld = true;
+            socket.emit('keydown', 'KeyD');
             break;
         case "Space":
-            if(player.onPlatform){
-                player.jumpHeld = true;
-            }
+            socket.emit('keydown', 'Space');
+            // if(player.onPlatform){
+            //     player.jumpHeld = true;
+            // }
            
             break;
     }
@@ -83,19 +114,19 @@ window.addEventListener("keydown", (event) => {
 window.addEventListener("keyup", (event) => {
     switch (event.code) {
         case "KeyA":
-            player.leftHeld = false;
+            // player.leftHeld = false;
+            socket.emit('keyup', 'KeyA');
             break;
         case "KeyD":
-            player.rightHeld = false;
+            socket.emit('keyup', 'KeyD');
+            // player.rightHeld = false;
             break;
         case "Space":
-            if(player.onPlatform){
-            player.jumpHeld = false;
+            socket.emit('keyup', 'Space');
+            // if(player.onPlatform){
+            // player.jumpHeld = false;
             
-            player.jump();
-        }
-            
-            
+            // player.jump();
             break;
     }
 });
