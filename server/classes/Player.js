@@ -15,7 +15,7 @@ class Player {
         this.playerMovementSpeed = 2;
         this.diagonalSlideSpeed = 3;
 
-        this.justBouncedOffWall = false
+        this.justBouncedOffWall = false;
 
         this.width = width;
         this.height = height;
@@ -23,8 +23,6 @@ class Player {
         this.leftHeld = false;
         this.rightHeld = false;
         this.jumpHeld = false;
-
-        
 
         // STILL NEEDS TUNING
         this.baseJumpStrength = 2; // Minimum jump strength
@@ -35,28 +33,27 @@ class Player {
     }
 
     draw() {
-        ctx.fillStyle = "purple"
+        ctx.fillStyle = "purple";
         ctx.fillRect(this.x, this.y, this.width, this.height);
     }
 
     update(map) {
-      
         //this.draw();
-        
+
         let currentLines = map.levels[this.levelNum - 1].lines;
         this.checkLineCollisions(currentLines);
         this.applyPlayerMovement();
         this.updateJumpStrength();
         this.applyGravity();
-        this.checkAdvanceLevel(map)
+        this.checkAdvanceLevel(map);
     }
-     // Called from main draw() loop in index.js
+
     checkAdvanceLevel(map) {
         if (this.y + this.height < 0) {
             this.levelNum += 1;
-          
+
             this.y = map.canvasHeight;
-        } else if (this.y >  map.canvasHeight) {
+        } else if (this.y > map.canvasHeight) {
             this.levelNum -= 1;
             this.y = 0;
         }
@@ -74,10 +71,10 @@ class Player {
         }
 
         // lateralJumpingSpeed is different if you just bounced off a wall compared to a normal jump
-        if(!this.justBouncedOffWall){
-            if (this.isJumping && this.isMovingRight()){
+        if (!this.justBouncedOffWall) {
+            if (this.isJumping && this.isMovingRight()) {
                 this.velocity.x = this.lateralJumpingSpeed;
-            } else if (this.isJumping && this.isMovingLeft()){
+            } else if (this.isJumping && this.isMovingLeft()) {
                 this.velocity.x = -this.lateralJumpingSpeed;
             }
         }
@@ -121,14 +118,14 @@ class Player {
 
         if (collidedLines.length > 0) {
             if (collidedLines.length == 2) {
-            
-                if(collidedLines[0].isDiagonal || collidedLines[1].isDiagonal){
+                if (
+                    collidedLines[0].isDiagonal ||
+                    collidedLines[1].isDiagonal
+                ) {
                     chosenLine = collidedLines[0].isDiagonal
-                    ? collidedLines[0]
-                    : collidedLines[1];
-                }
-                else{
-
+                        ? collidedLines[0]
+                        : collidedLines[1];
+                } else {
                     // console.log("fuckz")
                     var lineHoriz = collidedLines[0].isHorizontal
                         ? collidedLines[0]
@@ -137,37 +134,33 @@ class Player {
                         ? collidedLines[0]
                         : collidedLines[1];
 
-
-                    if(this.velocity.y == 0){
-                        chosenLine = lineVert
-                    }
-                    else{
-                        var yCorrection = Math.min(Math.abs(this.y + this.height - lineHoriz.y1), Math.abs(this.y - lineHoriz.y1));
+                    if (this.velocity.y == 0) {
+                        chosenLine = lineVert;
+                    } else {
+                        var yCorrection = Math.min(
+                            Math.abs(this.y + this.height - lineHoriz.y1),
+                            Math.abs(this.y - lineHoriz.y1)
+                        );
                         var xCorrection = Math.min(
                             Math.abs(this.x - lineVert.x1),
                             Math.abs(this.x + this.width - lineVert.x1)
                         );
-        
-                        chosenLine = yCorrection <= xCorrection ? lineHoriz : lineVert;
+
+                        chosenLine =
+                            yCorrection <= xCorrection ? lineHoriz : lineVert;
                     }
                 }
-              
-             
             } else {
                 chosenLine = collidedLines[0];
             }
-            
-           
+
             this.handleCollision(chosenLine);
-        } 
-        else {
+        } else {
             this.onPlatform = false;
         }
-       
     }
 
     handleCollision(line) {
-       
         if (line.isHorizontal) {
             // console.log("horiz")
             this.justBouncedOffWall = false;
@@ -175,49 +168,40 @@ class Player {
                 this.onPlatform = true;
                 this.isJumping = false;
                 this.y = line.y1 - this.height;
-            } else if(this.velocity.y < 0){
+            } else if (this.velocity.y < 0) {
                 this.velocity.y = -this.velocity.y / 3;
-                this.y = line.y1 +10;
+                this.y = line.y1 + 10;
                 this.y += this.velocity.y;
             }
         } else if (line.isVertical) {
             // console.log("vert")
-          
+
             this.x = this.velocity.x > 0 ? line.x1 - this.width : line.x1;
             this.velocity.x = -(this.velocity.x / 2); // Dull and invert x velocity when we bounce off a wall
-            this.justBouncedOffWall = true
-        }
-        else{
-
-       
-            this.y = this.getDiagonalYIntersect(line) - this.height - 1
+            this.justBouncedOffWall = true;
+        } else {
+            this.y = this.getDiagonalYIntersect(line) - this.height - 1;
             // console.log(line.x1 +","+line.x2 +"," +line.y1 +"," + line.y2 +",")
 
-          if(line.x2 > line.x1){
-               this.velocity.x = this.diagonalSlideSpeed
-           
-          }
-          else{
-            this.velocity.x = -this.diagonalSlideSpeed
- 
-          }
-          
-          this.velocity.y =   this.velocity.y/2
+            if (line.x2 > line.x1) {
+                this.velocity.x = this.diagonalSlideSpeed;
+            } else {
+                this.velocity.x = -this.diagonalSlideSpeed;
+            }
 
-           
+            this.velocity.y = this.velocity.y / 2;
         }
     }
 
-    getDiagonalYIntersect(line){
+    getDiagonalYIntersect(line) {
+        var slope = (line.y2 - line.y1) / (line.x2 - line.x1);
+        var y_intercept = line.y2 - slope * line.x2;
 
-        var slope = (line.y2 - line.y1) / (line.x2 - line.x1)
-        var y_intercept = line.y2 - slope*line.x2
-
-        return Math.min(slope*this.x + y_intercept, slope*(this.x+this.width) + y_intercept)
-
+        return Math.min(
+            slope * this.x + y_intercept,
+            slope * (this.x + this.width) + y_intercept
+        );
     }
-
-
 
     isCollidingWithLine(line) {
         var isPlayerWithinLineX = false;
@@ -234,9 +218,7 @@ class Player {
 
             isPlayerWithinLineY =
                 this.y < line.y1 && line.y1 <= this.y + this.height;
-        } 
-        else if (line.isVertical) {
-            
+        } else if (line.isVertical) {
             isPlayerWithinLineY =
                 (line.y1 < this.y && this.y < line.y2) ||
                 (line.y1 < this.y + this.height &&
@@ -246,49 +228,62 @@ class Player {
 
             isPlayerWithinLineX =
                 this.x < line.x1 && line.x1 < this.x + this.width;
-        }
-        else{
-     
-                // calculate the distance to intersection point
-           
-            isPlayerWithinDiagonal = this.isCollidingWithDiagonal(this.x, this.x+this.width, this.y, this.y,line) ||
-                                     this.isCollidingWithDiagonal(this.x, this.x, this.y, this.y+this.height,line) ||
-                                     this.isCollidingWithDiagonal(this.x+this.width, this.x+this.width, this.y, this.y+this.height,line)
-        
+        } else {
+            // calculate the distance to intersection point
 
-          
-      
+            isPlayerWithinDiagonal =
+                this.isCollidingWithDiagonal(
+                    this.x,
+                    this.x + this.width,
+                    this.y,
+                    this.y,
+                    line
+                ) ||
+                this.isCollidingWithDiagonal(
+                    this.x,
+                    this.x,
+                    this.y,
+                    this.y + this.height,
+                    line
+                ) ||
+                this.isCollidingWithDiagonal(
+                    this.x + this.width,
+                    this.x + this.width,
+                    this.y,
+                    this.y + this.height,
+                    line
+                );
         }
 
-        return isPlayerWithinLineX && isPlayerWithinLineY || isPlayerWithinDiagonal;
+        return (
+            (isPlayerWithinLineX && isPlayerWithinLineY) ||
+            isPlayerWithinDiagonal
+        );
     }
 
-    isCollidingWithDiagonal(x1, x2, y1, y2, line){
-        let uA = ((line.x2 - line.x1) * (y1 - line.y1) - (line.y2 - line.y1) * (x1 - line.x1)) / ((line.y2 - line.y1) * (x2 - x1) - (line.x2 - line.x1) * (y2 - y1));
-        let uB = ((x2 - x1) * (y1 - line.y1) - (y2 - y1) * (x1 - line.x1)) / ((line.y2 - line.y1) * (x2 - x1) - (line.x2 - line.x1) * (y2 - y1));
+    isCollidingWithDiagonal(x1, x2, y1, y2, line) {
+        let uA =
+            ((line.x2 - line.x1) * (y1 - line.y1) -
+                (line.y2 - line.y1) * (x1 - line.x1)) /
+            ((line.y2 - line.y1) * (x2 - x1) - (line.x2 - line.x1) * (y2 - y1));
+        let uB =
+            ((x2 - x1) * (y1 - line.y1) - (y2 - y1) * (x1 - line.x1)) /
+            ((line.y2 - line.y1) * (x2 - x1) - (line.x2 - line.x1) * (y2 - y1));
 
-
-        
         // if uA and uB are between 0-1, lines are colliding
         if (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1) {
-      
-          // optionally, draw a circle where the lines meet
-          
+            // optionally, draw a circle where the lines meet
+
             // console.log("DAB")
-           
+
             return true;
-     
-      
-      
-         }
-        
+        }
+
         return false;
     }
 
     updateJumpStrength() {
-
         if (
-            
             this.onPlatform &&
             this.jumpHeld &&
             this.jumpStrength < this.maxJumpStrength
@@ -309,4 +304,4 @@ class Player {
     }
 }
 
-module.exports = Player
+module.exports = Player;

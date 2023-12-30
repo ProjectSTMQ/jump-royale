@@ -1,45 +1,51 @@
-const express = require('express')
-const app = express()
-const PORT = 5000
-const Player = require('./Player.js')
-const Map = require('./Map.js')
+// Setup express server
+const express = require("express");
+const app = express();
+const PORT = 5000;
+
+// Import classes
+const Player = require("./classes/Player.js");
+const Map = require("./classes/Map.js");
 
 // Socket.io server uses an http server
-const http = require('http');
+const http = require("http");
 const server = http.createServer(app);
-const {Server} = require('socket.io');
-const io = new Server(server, {pingInterval: 2000, pingTimeout: 5000}); // Faster timeout for disconnecting players
+const { Server } = require("socket.io");
+const io = new Server(server, { pingInterval: 2000, pingTimeout: 5000 }); // Faster timeout for disconnecting players
 
-const path = require('path'); // Import the 'path' module
+// Miscellaneous
+const path = require("path");
+const favicon = require('serve-favicon');
+const faviconPath = path.join(__dirname, 'favicon.ico');
+app.use(favicon(faviconPath));
 
 const backendPlayers = {};
-
 const map = new Map();
 
-app.use(express.static(path.join(__dirname, '../client'))); // Serve static javascript files from the 'client' folder
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/index.html'));
-})
+app.use(express.static(path.join(__dirname, "../client"))); // Game files from the 'client' folder
+// app.get('/', (req, res) => {
+//     res.sendFile(path.join(__dirname, '../client/index.html'));
+// })
 
-io.on('connection', (socket) => {
-    console.log('a user connected');
-   
-    backendPlayers[socket.id] = new Player(10 + 50 * Math.random(), 50, 50, 65, 1);
+io.on("connection", (socket) => {
+    console.log("a user connected");
+    backendPlayers[socket.id] = new Player(
+        10 + 50 * Math.random(),
+        50,
+        50,
+        65,
+        1
+    );
 
-    console.log( Object.getOwnPropertyNames( backendPlayers[socket.id]))
+    io.emit("updatePlayers", backendPlayers);
 
-
-      
-    io.emit('updatePlayers', backendPlayers);
-
-    socket.on('disconnect', (reason) => {
+    socket.on("disconnect", (reason) => {
         console.log(`a user disconnected with reason: ${reason}`);
         delete backendPlayers[socket.id];
-        io.emit('updatePlayers', backendPlayers);
-    })
+        io.emit("updatePlayers", backendPlayers);
+    });
 
-    socket.on('keydown', (code) => {
-        console.log("keydown")
+    socket.on("keydown", (code) => {
         switch (code) {
             case "KeyA":
                 backendPlayers[socket.id].leftHeld = true;
@@ -48,15 +54,14 @@ io.on('connection', (socket) => {
                 backendPlayers[socket.id].rightHeld = true;
                 break;
             case "Space":
-                if(backendPlayers[socket.id].onPlatform){
+                if (backendPlayers[socket.id].onPlatform) {
                     backendPlayers[socket.id].jumpHeld = true;
                 }
                 break;
         }
-    })
+    });
 
-    socket.on('keyup', (code) => {
-        console.log("keyup")
+    socket.on("keyup", (code) => {
         switch (code) {
             case "KeyA":
                 backendPlayers[socket.id].leftHeld = false;
@@ -65,25 +70,22 @@ io.on('connection', (socket) => {
                 backendPlayers[socket.id].rightHeld = false;
                 break;
             case "Space":
-                if(backendPlayers[socket.id].onPlatform){
+                if (backendPlayers[socket.id].onPlatform) {
                     backendPlayers[socket.id].jumpHeld = false;
                     backendPlayers[socket.id].jump();
-                }   
+                }
                 break;
         }
-    })
-})
+    });
+});
 
 setInterval(() => {
-
-    for(const id in backendPlayers){
-       
-        backendPlayers[id].update(map)
+    for (const id in backendPlayers) {
+        backendPlayers[id].update(map);
     }
-    io.emit('updatePlayers', backendPlayers);
-
+    io.emit("updatePlayers", backendPlayers);
 }, 15);
 
 server.listen(PORT, () => {
-    console.log(`Listening on http://localhost:${PORT}`)
-})
+    console.log(`Listening on http://localhost:${PORT}`);
+});
