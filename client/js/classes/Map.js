@@ -4,7 +4,8 @@ class Map {
         // this.levelNum = 0
         this.levelLines = [];
         this.newLevel = null;
-
+        this.canvasWidth = 1200;
+        this.canvasHeight = 900;
         this.createLevels();
     }
 

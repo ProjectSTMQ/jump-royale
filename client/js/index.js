@@ -3,9 +3,9 @@ const ctx = canvas.getContext("2d");
 
 // Set borders
 
-const map = new Map();
-canvas.width = map.canvasWidth;
-canvas.height = map.canvasHeight;
+
+canvas.width =  1200//map.canvasWidth;
+canvas.height = 900//map.canvasHeight;
 
 // Centre canvas
 canvas.style.display = "block";
@@ -32,12 +32,14 @@ var currentLevelNum = 1;
 
 var backgroundImg = new Image();
 
+var updated = false;
 
 const frontendPlayers = {};
 
 const socket = io();
 socket.on('updatePlayers', (backendPlayers) => {
 
+    updated = true;
     for(const id in backendPlayers){
         backendPlayer = backendPlayers[id];
         
@@ -64,17 +66,35 @@ function draw() {
 
     // map.checkAdvanceLevel();
     
-   
-    if( Object.keys(frontendPlayers).length){
-        backgroundImg.src = map.levels[frontendPlayers[socket.id].currentLevelNum -1].image; 
-        ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
-        currentLevel = map.levels[frontendPlayers[socket.id].currentLevelNum - 1]; 
-        currentLevel.draw() // optional show level lines
+    //Object.keys(frontendPlayers).length
+    if( updated){
+        //continiously draws, will run even before serverside update and in the middle of update
+        //fix so that stertling stops bitching  -> async await?
+        //if(frontendPlayers[socket.id] && frontendPlayers[socket.id].levelImage){
+            backgroundImg.src = frontendPlayers[socket.id].levelImage; 
+            ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+            currentLevel = frontendPlayers[socket.id].levelLines; 
+           
+          
+            //currentLevel.draw() // optional show level lines
+            for ( line of currentLevel) {
+             
+                ctx.strokeStyle = "red";
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(line.x1, line.y1);
+                ctx.lineTo(line.x2, line.y2);
+                ctx.stroke();
+                ctx.lineWidth = 1;
+                ctx.strokeStyle = "black";
+            }
+        //}
+       
         ctx.fillStyle = "purple"
         // player.update();
         for(const id in frontendPlayers){
             // if(frontendPlayers[id] instanceof Player){
-            if(frontendPlayers[id].currentLevelNum == frontendPlayers[socket.id].currentLevelNum){
+            if(frontendPlayers[id].levelNum == frontendPlayers[socket.id].levelNum){
                 ctx.fillRect( frontendPlayers[id].x,  frontendPlayers[id].y,  frontendPlayers[id].width,  frontendPlayers[id].height);
             }
         

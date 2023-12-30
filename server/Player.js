@@ -1,12 +1,13 @@
 class Player {
-    constructor(x, y, width, height, currentLevelNum = 1) {
+    constructor(x, y, width, height, levelNum = 1) {
         this.x = x;
         this.y = y;
         this.velocity = { x: 0, y: 0 };
         this.onPlatform = false;
 
-        this.currentLevelNum = currentLevelNum;
-
+        this.levelNum = levelNum;
+        this.levelImage = null;
+        this.levelLines = {};
 
         this.gravity = 0.15;
         this.maxVerticalSpeed = 20;
@@ -42,7 +43,7 @@ class Player {
       
         //this.draw();
         
-        let currentLines = map.levels[this.currentLevelNum - 1].lines;
+        let currentLines = map.levels[this.levelNum - 1].lines;
         this.checkLineCollisions(currentLines);
         this.applyPlayerMovement();
         this.updateJumpStrength();
@@ -52,12 +53,16 @@ class Player {
      // Called from main draw() loop in index.js
     checkAdvanceLevel(map) {
         if (this.y + this.height < 0) {
-            this.currentLevelNum += 1;
+            this.levelNum += 1;
+          
             this.y = map.canvasHeight;
         } else if (this.y >  map.canvasHeight) {
-            this.currentLevelNum -= 1;
+            this.levelNum -= 1;
             this.y = 0;
         }
+
+        this.levelImage = map.levels[this.levelNum - 1].image;
+        this.levelLines = map.levels[this.levelNum - 1].lines;
     }
     applyPlayerMovement() {
         if (this.rightHeld && this.onPlatform) {
