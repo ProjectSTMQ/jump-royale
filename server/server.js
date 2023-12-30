@@ -46,33 +46,35 @@ io.on("connection", (socket) => {
     });
 
     socket.on("keydown", (code) => {
+        let player = backendPlayers[socket.id];
         switch (code) {
             case "KeyA":
-                backendPlayers[socket.id].leftHeld = true;
+                player.leftHeld = true;
                 break;
             case "KeyD":
-                backendPlayers[socket.id].rightHeld = true;
+                player.rightHeld = true;
                 break;
             case "Space":
-                if (backendPlayers[socket.id].onPlatform) {
-                    backendPlayers[socket.id].jumpHeld = true;
+                if (player.onPlatform) {
+                    player.jumpHeld = true;
                 }
                 break;
         }
     });
 
     socket.on("keyup", (code) => {
+        let player = backendPlayers[socket.id];
         switch (code) {
             case "KeyA":
-                backendPlayers[socket.id].leftHeld = false;
+                player.leftHeld = false;
                 break;
             case "KeyD":
-                backendPlayers[socket.id].rightHeld = false;
+                player.rightHeld = false;
                 break;
             case "Space":
-                if (backendPlayers[socket.id].onPlatform) {
-                    backendPlayers[socket.id].jumpHeld = false;
-                    backendPlayers[socket.id].jump();
+                if (player.onPlatform) {
+                    player.jumpHeld = false;
+                    player.jump();
                 }
                 break;
         }
