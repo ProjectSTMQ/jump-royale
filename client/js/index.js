@@ -49,41 +49,42 @@ function draw() {
     if (updated) {
         //continiously draws, will run even before serverside update and in the middle of update
         //fix so that stertling stops bitching  -> async await?
-        if (
-            frontendPlayers[socket.id] &&
-            frontendPlayers[socket.id].levelImage
-        ) {
+        if (frontendPlayers[socket.id] && frontendPlayers[socket.id].levelImage) {
             backgroundImg.src = frontendPlayers[socket.id].levelImage;
             ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
             currentLevel = frontendPlayers[socket.id].levelLines;
 
-            for (line of currentLevel) {
-                ctx.strokeStyle = "red";
-                ctx.lineWidth = 3;
-                ctx.beginPath();
-                ctx.moveTo(line.x1, line.y1);
-                ctx.lineTo(line.x2, line.y2);
-                ctx.stroke();
-                ctx.lineWidth = 1;
-                ctx.strokeStyle = "black";
-            }
+            drawLevel(currentLevel); // Optional show level lines
         }
 
-        ctx.fillStyle = "purple";
         for (const id in frontendPlayers) {
-            if (
-                frontendPlayers[id].levelNum ==
-                frontendPlayers[socket.id].levelNum
-            ) {
-                ctx.fillRect(
-                    frontendPlayers[id].x,
-                    frontendPlayers[id].y,
-                    frontendPlayers[id].width,
-                    frontendPlayers[id].height
-                );
+            if (frontendPlayers[id].levelNum == frontendPlayers[socket.id].levelNum) {
+                drawPlayer(frontendPlayers[id]);
             }
         }
     }
+}
+
+function drawPlayer(player) {
+    ctx.fillStyle = "purple";
+    ctx.fillRect(player.x, player.y, player.width, player.height);
+}
+
+function drawLevel(level) {
+    for (line of level) {
+        drawLine(line);
+    }
+}
+
+function drawLine(line) {
+    ctx.strokeStyle = "red";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(line.x1, line.y1);
+    ctx.lineTo(line.x2, line.y2);
+    ctx.stroke();
+    ctx.lineWidth = 1;
+    ctx.strokeStyle = "black";
 }
 
 window.addEventListener("keydown", (event) => {
