@@ -4,8 +4,8 @@ const app = express();
 const PORT = 5000;
 
 // Import classes
-const Player = require("./classes/Player.js");
-const Map = require("./classes/Map.js");
+const Player = require("./public/js/classes/Player.js");
+const Map = require("./public/js/classes/Map.js");
 
 // Socket.io server uses an http server
 const http = require("http");
@@ -16,19 +16,16 @@ const io = new Server(server, { pingInterval: 2000, pingTimeout: 5000 }); // Fas
 // Miscellaneous
 const path = require("path");
 const favicon = require('serve-favicon');
-const faviconPath = path.join(__dirname, 'favicon.ico');
+const faviconPath = path.join(__dirname, 'public', 'imgs', 'favicon.ico');
 app.use(favicon(faviconPath));
 
 const backendPlayers = {};
 const map = new Map();
 
-app.use(express.static(path.join(__dirname, "../client"))); // Game files from the 'client' folder
-// app.get('/', (req, res) => {
-//     res.sendFile(path.join(__dirname, '../client/index.html'));
-// })
+app.use(express.static(path.join(__dirname, "./public"))); // Game files
 
 io.on("connection", (socket) => {
-    console.log("a user connected");
+    console.log(`[${socket.id}] a user connected`);
     backendPlayers[socket.id] = new Player(
         10 + 50 * Math.random(),
         50,
@@ -40,7 +37,7 @@ io.on("connection", (socket) => {
     io.emit("updatePlayers", backendPlayers);
 
     socket.on("disconnect", (reason) => {
-        console.log(`a user disconnected with reason: ${reason}`);
+        console.log(`[${socket.id}] a user disconnected with reason: ${reason}`);
         delete backendPlayers[socket.id];
         io.emit("updatePlayers", backendPlayers);
     });

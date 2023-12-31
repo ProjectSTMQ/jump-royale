@@ -19,13 +19,11 @@ let currentLevelNum = 1;
 
 let backgroundImg = new Image();
 
-let updated = false;
-
 const frontendPlayers = {};
 
 const socket = io();
 socket.on("updatePlayers", (backendPlayers) => {
-    updated = true;
+
     for (const id in backendPlayers) {
         backendPlayer = backendPlayers[id];
 
@@ -42,27 +40,25 @@ socket.on("updatePlayers", (backendPlayers) => {
     draw(); // Update the frames every time the server sends an update
 });
 
-// Main function continuously running
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (updated) {
-        //continiously draws, will run even before serverside update and in the middle of update
-        //fix so that stertling stops bitching  -> async await?
-        if (frontendPlayers[socket.id] && frontendPlayers[socket.id].levelImage) {
-            backgroundImg.src = frontendPlayers[socket.id].levelImage;
-            ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
-            currentLevel = frontendPlayers[socket.id].levelLines;
+    //continiously draws, will run even before serverside update and in the middle of update
+    //fix so that stertling stops bitching  -> async await?
+    if (frontendPlayers[socket.id] && frontendPlayers[socket.id].levelImage) {
+        backgroundImg.src = frontendPlayers[socket.id].levelImage;
+        ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+        currentLevel = frontendPlayers[socket.id].levelLines;
 
-            drawLevel(currentLevel); // Optional show level lines
-        }
+        drawLevel(currentLevel); // Optional show level lines
+    }
 
-        for (const id in frontendPlayers) {
-            if (frontendPlayers[id].levelNum == frontendPlayers[socket.id].levelNum) {
-                drawPlayer(frontendPlayers[id]);
-            }
+    for (const id in frontendPlayers) {
+        if (frontendPlayers[id].levelNum == frontendPlayers[socket.id].levelNum) {
+            drawPlayer(frontendPlayers[id]);
         }
     }
+    
 }
 
 function drawPlayer(player) {
