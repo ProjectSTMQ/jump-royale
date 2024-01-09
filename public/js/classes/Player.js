@@ -195,7 +195,7 @@ class Player {
         } else if (line.isVertical) {
             this.x = this.velocity.x > 0 ? line.x1 - this.width : line.x1;
             this.velocity.x = -(this.velocity.x / 2); // Dull and invert x velocity when we bounce off a wall
-            this.justBouncedOffWall = true;
+            if (!this.onPlatform) this.justBouncedOffWall = true; // If we're not on a platform, we just bounced off a wall
         } else {
             this.y = this.getDiagonalYIntersect(line) - this.height - 1;
 
