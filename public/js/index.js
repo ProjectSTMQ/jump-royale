@@ -49,11 +49,15 @@ const frontendPlayers = {};
 
 const socket = io();
 
+socket.on("connect", () => {
+    console.log("Connected to server");
+    draw();
+});
+
 socket.on("updatePlayers", (backendPlayers) => {
 
     for (const id in backendPlayers) {
-        backendPlayer = backendPlayers[id];
-        frontendPlayers[id] = backendPlayer;
+        frontendPlayers[id] = backendPlayers[id];
     }
 
     // If player on the frontend does not exist on the backend - ie player has disconnected
@@ -62,8 +66,6 @@ socket.on("updatePlayers", (backendPlayers) => {
             delete frontendPlayers[id];
         }
     }
-    // this stuttering bad we need to fix this =======================================================================================================================
-    draw(); // Update the frames every time the server sends an update
 });
 
 function draw() {
@@ -79,12 +81,15 @@ function draw() {
         drawLevel(currentLevel); // Optional show level lines
     }
 
-    for (const id in frontendPlayers) {
-        if (frontendPlayers[id].levelNum == frontendPlayers[socket.id].levelNum) {
-            drawPlayer(frontendPlayers[id]);
+    if(frontendPlayers[socket.id]){
+        for (const id in frontendPlayers) {
+            if (frontendPlayers[id].levelNum == frontendPlayers[socket.id].levelNum) {
+                drawPlayer(frontendPlayers[id]);
+            }
         }
     }
-    
+    console.log("DRAW")
+    requestAnimationFrame(draw);
 }
 
 function drawPlayer(player) {
@@ -160,29 +165,47 @@ function drawLine(line) {
     ctx.strokeStyle = "black";
 }
 
+// Objects sent through socket.io are serialized to json and don't retain object type or functions - https://stackoverflow.com/a/30551386
+function castToPlayer(obj) {
+    return Object.assign(new Player(), obj)
+}
+
 window.addEventListener("keydown", (event) => {
+    let player = castToPlayer(frontendPlayers[socket.id]);
     switch (event.code) {
         case "KeyA":
+            // player.leftHeld = true;
             socket.emit("keydown", "KeyA");
             break;
         case "KeyD":
+            // player.rightHeld = true;
             socket.emit("keydown", "KeyD");
             break;
         case "Space":
+            // if (player.onPlatform) {
+            //     player.jumpHeld = true;
+            // }
             socket.emit("keydown", "Space");
             break;
     }
 });
 
 window.addEventListener("keyup", (event) => {
+    let player = castToPlayer(frontendPlayers[socket.id]);
     switch (event.code) {
         case "KeyA":
+            // player.leftHeld = false;
             socket.emit("keyup", "KeyA");
             break;
         case "KeyD":
+            // player.rightHeld = false;
             socket.emit("keyup", "KeyD");
             break;
         case "Space":
+            // if (player.onPlatform) {
+            //     player.jumpHeld = false;
+            //     player.jump();
+            // }
             socket.emit("keyup", "Space");
             break;
     }

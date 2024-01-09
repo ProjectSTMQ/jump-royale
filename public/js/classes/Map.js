@@ -39,6 +39,10 @@ class Map {
         levelLines.push(new Line(460, 100, 460, 220));
         levelLines.push(new Line(460, 220, 740, 220));
         levelLines.push(new Line(740, 220, 740, 100));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
+        levelLines.push(new Line(0, 900, 1200, 900));
         newLevel = new Level(1, levelLines, "./imgs/levels/1.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -65,6 +69,9 @@ class Map {
         levelLines.push(new Line(300, 420, 480, 420));
         levelLines.push(new Line(480, 420, 480, 260));
         levelLines.push(new Line(480, 260, 300, 260));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(2, levelLines, "./imgs/levels/2.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -100,6 +107,9 @@ class Map {
         levelLines.push(new Line(840, 520, 720, 520));
         levelLines.push(new Line(720, 520, 720, 560));
         levelLines.push(new Line(720, 560, 480, 560));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(3, levelLines, "./imgs/levels/3.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -137,6 +147,9 @@ class Map {
         levelLines.push(new Line(820, 0, 820, 40));
         levelLines.push(new Line(820, 40, 860, 40));
         levelLines.push(new Line(860, 40, 860, 0));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(4, levelLines, "./imgs/levels/4.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -184,6 +197,9 @@ class Map {
         levelLines.push(new Line(380, 0, 380, 40));
         levelLines.push(new Line(380, 40, 820, 40));
         levelLines.push(new Line(820, 40, 820, 0));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(5, levelLines, "./imgs/levels/5.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -222,6 +238,9 @@ class Map {
         levelLines.push(new Line(820, 100, 820, 60));
         levelLines.push(new Line(820, 60, 720, 60));
         levelLines.push(new Line(720, 60, 720, 0));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(6, levelLines, "./imgs/levels/6.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -266,6 +285,9 @@ class Map {
         levelLines.push(new Line(480, 640, 520, 640));
         levelLines.push(new Line(520, 640, 520, 600));
         levelLines.push(new Line(520, 600, 340, 600));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(7, levelLines, "./imgs/levels/7.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -297,6 +319,9 @@ class Map {
         levelLines.push(new Line(620, 60, 560, 0));
         levelLines.push(new Line(620, 220, 220, 220));
         levelLines.push(new Line(220, 220, 220, 0));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(8, levelLines, "./imgs/levels/8.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -347,6 +372,9 @@ class Map {
         levelLines.push(new Line(980, 320, 1060, 320));
         levelLines.push(new Line(1060, 320, 1060, 240));
         levelLines.push(new Line(1060, 240, 980, 240));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(9, levelLines, "./imgs/levels/9.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -387,6 +415,9 @@ class Map {
         levelLines.push(new Line(500, 0, 500, 120));
         levelLines.push(new Line(500, 120, 380, 120));
         levelLines.push(new Line(380, 120, 380, 0));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(10, levelLines, "./imgs/levels/10.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -455,6 +486,9 @@ class Map {
         levelLines.push(new Line(620, 440, 740, 440));
         levelLines.push(new Line(740, 440, 740, 120));
         levelLines.push(new Line(740, 120, 620, 120));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(11, levelLines, "./imgs/levels/11.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -493,6 +527,9 @@ class Map {
         levelLines.push(new Line(740, 400, 820, 400));
         levelLines.push(new Line(820, 400, 820, 320));
         levelLines.push(new Line(820, 320, 740, 320));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(12, levelLines, "./imgs/levels/12.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -528,6 +565,9 @@ class Map {
         levelLines.push(new Line(860, 400, 940, 400));
         levelLines.push(new Line(940, 400, 940, 280));
         levelLines.push(new Line(940, 280, 860, 280));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(13, levelLines, "./imgs/levels/13.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -553,6 +593,9 @@ class Map {
         levelLines.push(new Line(900, 380, 1060, 380));
         levelLines.push(new Line(1060, 380, 1060, 340));
         levelLines.push(new Line(1060, 340, 900, 340));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(14, levelLines, "./imgs/levels/14.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -590,6 +633,9 @@ class Map {
         levelLines.push(new Line(480, 200, 580, 200));
         levelLines.push(new Line(580, 200, 580, 160));
         levelLines.push(new Line(20, 280, 20, 380));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(15, levelLines, "./imgs/levels/15.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -639,6 +685,9 @@ class Map {
         levelLines.push(new Line(640, 380, 460, 380));
         levelLines.push(new Line(460, 380, 460, 420));
         levelLines.push(new Line(460, 420, 640, 420));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(16, levelLines, "./imgs/levels/16.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -682,6 +731,9 @@ class Map {
         levelLines.push(new Line(800, 560, 740, 560));
         levelLines.push(new Line(740, 560, 740, 320));
         levelLines.push(new Line(740, 320, 700, 280));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(17, levelLines, "./imgs/levels/17.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -768,6 +820,9 @@ class Map {
         levelLines.push(new Line(880, 740, 820, 740));
         levelLines.push(new Line(820, 740, 820, 700));
         levelLines.push(new Line(820, 700, 620, 700));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(18, levelLines, "./imgs/levels/18.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -813,6 +868,9 @@ class Map {
         levelLines.push(new Line(320, 200, 440, 200));
         levelLines.push(new Line(440, 200, 440, 140));
         levelLines.push(new Line(440, 140, 320, 140));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(19, levelLines, "./imgs/levels/19.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -850,6 +908,9 @@ class Map {
         levelLines.push(new Line(1060, 220, 1060, 340));
         levelLines.push(new Line(1060, 340, 900, 340));
         levelLines.push(new Line(900, 340, 1020, 220));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(20, levelLines, "./imgs/levels/20.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -888,6 +949,9 @@ class Map {
         levelLines.push(new Line(760, 540, 820, 540));
         levelLines.push(new Line(820, 540, 820, 460));
         levelLines.push(new Line(820, 460, 720, 460));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(21, levelLines, "./imgs/levels/21.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -929,6 +993,9 @@ class Map {
         levelLines.push(new Line(780, 260, 780, 360));
         levelLines.push(new Line(780, 360, 900, 480));
         levelLines.push(new Line(900, 480, 640, 480));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(22, levelLines, "./imgs/levels/22.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -955,6 +1022,9 @@ class Map {
         levelLines.push(new Line(900, 420, 800, 420));
         levelLines.push(new Line(80, 560, 80, 540));
         levelLines.push(new Line(20, 260, 20, 240));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(23, levelLines, "./imgs/levels/23.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -984,6 +1054,9 @@ class Map {
         levelLines.push(new Line(240, 540, 340, 540));
         levelLines.push(new Line(340, 540, 340, 520));
         levelLines.push(new Line(340, 520, 240, 520));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(24, levelLines, "./imgs/levels/24.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -1026,6 +1099,9 @@ class Map {
         levelLines.push(new Line(260, 140, 260, 240));
         levelLines.push(new Line(260, 240, 380, 360));
         levelLines.push(new Line(380, 360, 120, 360));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(25, levelLines, "./imgs/levels/25.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -1064,6 +1140,9 @@ class Map {
         levelLines.push(new Line(1100, 380, 1100, 240));
         levelLines.push(new Line(1100, 240, 1180, 240));
         levelLines.push(new Line(1180, 240, 1180, 0));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(26, levelLines, "./imgs/levels/26.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -1093,6 +1172,9 @@ class Map {
         levelLines.push(new Line(580, 600, 580, 420));
         levelLines.push(new Line(580, 420, 420, 420));
         levelLines.push(new Line(420, 420, 420, 600));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(27, levelLines, "./imgs/levels/27.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -1121,6 +1203,9 @@ class Map {
         levelLines.push(new Line(620, 100, 620, 220));
         levelLines.push(new Line(620, 220, 900, 220));
         levelLines.push(new Line(900, 220, 900, 0));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(28, levelLines, "./imgs/levels/28.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -1147,6 +1232,9 @@ class Map {
         levelLines.push(new Line(500, 0, 500, 120));
         levelLines.push(new Line(500, 120, 180, 120));
         levelLines.push(new Line(180, 120, 180, 0));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(29, levelLines, "./imgs/levels/29.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -1180,6 +1268,9 @@ class Map {
         levelLines.push(new Line(1080, 320, 1080, 240));
         levelLines.push(new Line(1080, 240, 920, 240));
         levelLines.push(new Line(920, 240, 920, 380));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(30, levelLines, "./imgs/levels/30.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -1214,6 +1305,9 @@ class Map {
         levelLines.push(new Line(340, 240, 340, 180));
         levelLines.push(new Line(340, 180, 480, 180));
         levelLines.push(new Line(480, 180, 480, 240));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(31, levelLines, "./imgs/levels/31.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -1253,6 +1347,9 @@ class Map {
         levelLines.push(new Line(660, 500, 760, 500));
         levelLines.push(new Line(760, 500, 760, 460));
         levelLines.push(new Line(760, 460, 660, 460));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(32, levelLines, "./imgs/levels/32.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -1316,6 +1413,9 @@ class Map {
         levelLines.push(new Line(880, 0, 880, 80));
         levelLines.push(new Line(880, 80, 900, 80));
         levelLines.push(new Line(900, 80, 900, 0));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(33, levelLines, "./imgs/levels/33.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -1366,6 +1466,9 @@ class Map {
         levelLines.push(new Line(660, 280, 680, 280));
         levelLines.push(new Line(680, 280, 680, 360));
         levelLines.push(new Line(680, 360, 760, 360));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(34, levelLines, "./imgs/levels/34.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -1422,6 +1525,9 @@ class Map {
         levelLines.push(new Line(480, 180, 460, 180));
         levelLines.push(new Line(460, 180, 460, 260));
         levelLines.push(new Line(460, 260, 380, 260));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(35, levelLines, "./imgs/levels/35.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -1472,6 +1578,9 @@ class Map {
         levelLines.push(new Line(580, 20, 560, 0));
         levelLines.push(new Line(560, 0, 520, 40));
         levelLines.push(new Line(520, 40, 480, 0));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(36, levelLines, "./imgs/levels/36.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -1527,6 +1636,9 @@ class Map {
         levelLines.push(new Line(380, 0, 380, 40));
         levelLines.push(new Line(380, 40, 460, 40));
         levelLines.push(new Line(460, 40, 460, 0));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(37, levelLines, "./imgs/levels/37.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -1589,6 +1701,9 @@ class Map {
         levelLines.push(new Line(640, 0, 640, 40));
         levelLines.push(new Line(640, 40, 980, 40));
         levelLines.push(new Line(980, 40, 980, 0));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(38, levelLines, "./imgs/levels/38.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -1621,6 +1736,9 @@ class Map {
         levelLines.push(new Line(280, 0, 280, 40));
         levelLines.push(new Line(280, 40, 360, 40));
         levelLines.push(new Line(360, 40, 360, 0));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(39, levelLines, "./imgs/levels/39.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -1666,6 +1784,9 @@ class Map {
         levelLines.push(new Line(320, 280, 400, 280));
         levelLines.push(new Line(400, 280, 400, 240));
         levelLines.push(new Line(400, 240, 280, 240));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(40, levelLines, "./imgs/levels/40.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -1702,6 +1823,9 @@ class Map {
         levelLines.push(new Line(220, 40, 220, 0));
         levelLines.push(new Line(0, 0, 0, 900));
         levelLines.push(new Line(1200, 900, 1200, 0));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(41, levelLines, "./imgs/levels/41.png");
         this.levels.push(newLevel);
         levelLines = [];
@@ -1738,6 +1862,9 @@ class Map {
         levelLines.push(new Line(580, 540, 600, 540));
         levelLines.push(new Line(600, 540, 600, 440));
         levelLines.push(new Line(600, 440, 580, 440));
+
+        levelLines.push(new Line(1200, 900, 1200, 0));
+        levelLines.push(new Line(0, 900, 0, 0));
         newLevel = new Level(42, levelLines, "./imgs/levels/42.png");
         this.levels.push(newLevel);
         levelLines = [];

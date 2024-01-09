@@ -320,5 +320,4 @@ class Player {
         this.isJumping = true;
     }
 }
-
-module.exports = Player;
+if (typeof module === 'object') module.exports = Player; // We only want to export as a module for the node.js server, not for the browser client
