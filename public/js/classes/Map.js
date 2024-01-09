@@ -16,46 +16,17 @@ class Map {
         let levelLines = [];
         let newLevel = null;
 
-        // levelLines.push(new Line(50,900,1150,900))
-        // levelLines.push(new Line(350,500,1150,500))
-        // levelLines.push(new Line(50, 700, 50, 900))
-        // levelLines.push(new Line(350, 800, 350, 900)) // PIXELS FUCK
-        // levelLines.push(new Line(350, 800, 450, 800))
-        // levelLines.push(new Line(750, 800, 650, 900)) // 45 deg line for test
-        // levelLines.push(new Line(150, 200, 150, 550))
-        // newLevel = new Level(1, levelLines, './imgs/levels/1.png')
-        // this.levels.push(newLevel)
-        // levelLines = []
-
-        // levelLines.push(new Line(21, 460, 320, 460))
-        // levelLines.push(new Line(320, 820, 880, 820))
-        // levelLines.push(new Line(880, 460, 1120, 460))
-        // levelLines.push(new Line(320, 460, 320, 815))
-        // levelLines.push(new Line(880, 460, 880, 820))
-        // levelLines.push(new Line(0, 0, 0, 900))
-        // levelLines.push(new Line(1200, 0, 1200, 900))
-        // newLevel = new Level(1, levelLines, './imgs/levels/1.png')
-        // this.levels.push(newLevel)
-        // levelLines = []
-
-        // levelLines.push(new Line(320, 820, 880, 820))
-        // levelLines.push(new Line(0, 0, 0, 900))
-        // levelLines.push(new Line(1200, 0, 1200, 900))
-        // newLevel = new Level(2, levelLines, './imgs/levels/2.png')
-        // this.levels.push(newLevel)
-        // levelLines = []
-
         // tmp diagonal lines stuff for michael (stinky) to test
-        levelLines.push(new Line(20, 225, 145, 225));
-        levelLines.push(new Line(145, 225, 235, 315));
-        levelLines.push(new Line(235, 315, 235, 460));
+        // levelLines.push(new Line(20, 225, 145, 225));
+        // levelLines.push(new Line(145, 225, 235, 315));
+        // levelLines.push(new Line(235, 315, 235, 460));
 
-        levelLines.push(new Line(1050, 225, 1180, 225));
-        levelLines.push(new Line(1050, 225, 965, 310));
-        levelLines.push(new Line(965, 310, 965, 460));
+        // levelLines.push(new Line(1050, 225, 1180, 225));
+        // levelLines.push(new Line(1050, 225, 965, 310));
+        // levelLines.push(new Line(965, 310, 965, 460));
 
-        levelLines.push(new Line(320, 745, 395, 820));
-        levelLines.push(new Line(880, 650, 710, 820));
+        // levelLines.push(new Line(320, 745, 395, 820));
+        // levelLines.push(new Line(880, 650, 710, 820));
 
         levelLines.push(new Line(20, 0, 20, 460));
         levelLines.push(new Line(20, 460, 320, 460));

@@ -19,14 +19,34 @@ let currentLevelNum = 1;
 
 let backgroundImg = new Image();
 
+// Load player sprite images - TODO: image sizes are still weird, player is smaller than it should look but functionally it's fine for now
+let idleImage = new Image();
+idleImage.src = "./imgs/poses/idle.png";
+let squatImage = new Image();
+squatImage.src = "./imgs/poses/squat.png";
+let jumpImage = new Image();
+jumpImage.src = "./imgs/poses/jump.png";
+let bounceImage = new Image();
+bounceImage.src = "./imgs/poses/bounce.png";
+let run1Image = new Image();
+run1Image.src = "./imgs/poses/run1.png";
+let run2Image = new Image();
+run2Image.src = "./imgs/poses/run2.png";
+let run3Image = new Image();
+run3Image.src = "./imgs/poses/run3.png";
+let fallenImage = new Image();
+fallenImage.src = "./imgs/poses/fallen.png";
+let fallImage = new Image();
+fallImage.src = "./imgs/poses/fall.png";
+
 const frontendPlayers = {};
 
 const socket = io();
+
 socket.on("updatePlayers", (backendPlayers) => {
 
     for (const id in backendPlayers) {
         backendPlayer = backendPlayers[id];
-
         frontendPlayers[id] = backendPlayer;
     }
 
@@ -36,7 +56,7 @@ socket.on("updatePlayers", (backendPlayers) => {
             delete frontendPlayers[id];
         }
     }
-
+    // this stuttering bad we need to fix this =======================================================================================================================
     draw(); // Update the frames every time the server sends an update
 });
 
@@ -62,8 +82,56 @@ function draw() {
 }
 
 function drawPlayer(player) {
-    ctx.fillStyle = "purple";
-    ctx.fillRect(player.x, player.y, player.width, player.height);
+    console.log(player.state);
+
+    const drawImage = (image) => {
+        if (player.facingLeft) {
+            ctx.save();
+            ctx.scale(-1, 1); // Flip horizontally
+            ctx.drawImage(image, -player.x - player.width, player.y, player.width, player.height);
+            ctx.restore();
+        } else {
+            ctx.drawImage(image, player.x, player.y, player.width, player.height);
+        }
+    };
+
+    switch (player.state) {
+        case "idle":
+            drawImage(idleImage);
+            break;
+        case "squat":
+            drawImage(squatImage);
+            break;
+        case "jump":
+            drawImage(jumpImage);
+            break;
+        case "bounce":
+            drawImage(bounceImage);
+            break;
+        case "run1":
+            drawImage(run1Image);
+            break;
+        case "run2":
+            drawImage(run2Image);
+            break;
+        case "run3":
+            drawImage(run3Image);
+            break;
+        case "fallen":
+            drawImage(fallenImage);
+            break;
+        case "fall":
+            drawImage(fallImage);
+            break;
+        default: // debug state
+            ctx.fillStyle = "purple";
+            ctx.fillRect(player.x, player.y, player.width, player.height);
+            break;
+    }
+
+    // show true hitbox size
+    ctx.strokeStyle = "purple";
+    ctx.strokeRect(player.x, player.y, player.width, player.height);
 }
 
 function drawLevel(level) {

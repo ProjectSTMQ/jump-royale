@@ -26,13 +26,7 @@ app.use(express.static(path.join(__dirname, "./public"))); // Game files
 
 io.on("connection", (socket) => {
     console.log(`[${socket.id}] a user connected`);
-    backendPlayers[socket.id] = new Player(
-        10 + 50 * Math.random(),
-        50,
-        50,
-        65,
-        1
-    );
+    backendPlayers[socket.id] = new Player();
 
     io.emit("updatePlayers", backendPlayers);
 

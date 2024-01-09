@@ -1,46 +1,61 @@
 class Player {
-    constructor(x, y, width, height, levelNum = 1) {
+    constructor(x = 580, y = 755, levelNum = 1) {
+        // Spatial properties
+        this.width = 50;
+        this.height = 65;
         this.x = x;
         this.y = y;
         this.velocity = { x: 0, y: 0 };
-        this.onPlatform = false;
 
+        // Level properties
         this.levelNum = levelNum;
         this.levelImage = null;
         this.levelLines = {};
 
+        // Static properties
         this.gravity = 0.15;
         this.maxVerticalSpeed = 20;
         this.lateralJumpingSpeed = 4;
         this.playerMovementSpeed = 2;
         this.diagonalSlideSpeed = 3;
-
-        this.justBouncedOffWall = false;
-
-        this.width = width;
-        this.height = height;
-
-        this.leftHeld = false;
-        this.rightHeld = false;
-        this.jumpHeld = false;
-
         // STILL NEEDS TUNING
         this.baseJumpStrength = 2; // Minimum jump strength
         this.jumpStrength = this.baseJumpStrength; // Dynamically changes
         this.jumpIncreaseSpeed = 0.3; // Speed at which jump strength increases as you hold
         this.maxJumpStrength = 10.5; // Maximum power we can jump
         this.isJumping = false;
+
+        // Dynamic properties
+        this.onPlatform = false;
+        this.justBouncedOffWall = false;
+        this.isRunning = false;
+        this.runIndex = 0; // To loop running animation
+        this.facingLeft = false; // Player is either facing left or right
+        this.leftHeld = false;
+        this.rightHeld = false;
+        this.jumpHeld = false;
+        this.state = null; // For drawing the correct image
     }
 
-    draw() {
-        ctx.fillStyle = "purple";
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+    getPlayerState() {
+        if(this.jumpHeld && this.onPlatform) return "squat";
+        if(this.justBouncedOffWall) return "bounce";
+        if(this.velocity.y < 0) return "jump";
+        if(this.isRunning){
+            this.runIndex++;
+            // run2 animation gets half as much time as the other 2 main run animations
+            if(this.runIndex < 12) return "run1";
+            else if(this.runIndex < 18) return "run2"
+            else if (this.runIndex < 30) return "run3"
+            else this.runIndex = 0;
+        }
+        if(this.onPlatform) return "idle";
+        return "fall"
     }
 
     update(map) {
-        //this.draw();
-
         let currentLines = map.levels[this.levelNum - 1].lines;
+        this.state = this.getPlayerState();
         this.checkLineCollisions(currentLines);
         this.applyPlayerMovement();
         this.updateJumpStrength();
@@ -51,7 +66,6 @@ class Player {
     checkAdvanceLevel(map) {
         if (this.y + this.height < 0) {
             this.levelNum += 1;
-
             this.y = map.canvasHeight;
         } else if (this.y > map.canvasHeight) {
             this.levelNum -= 1;
@@ -62,9 +76,16 @@ class Player {
         this.levelLines = map.levels[this.levelNum - 1].lines;
     }
     applyPlayerMovement() {
+        this.isRunning = false;
         if (this.rightHeld && this.onPlatform) {
+            this.isRunning = true;
+            this.facingLeft = false;
+
             this.velocity.x = this.playerMovementSpeed;
         } else if (this.leftHeld && this.onPlatform) {
+            this.isRunning = true;
+            this.facingLeft = true;
+
             this.velocity.x = -this.playerMovementSpeed;
         } else if (this.onPlatform) {
             this.velocity.x = 0;
@@ -126,7 +147,6 @@ class Player {
                         ? collidedLines[0]
                         : collidedLines[1];
                 } else {
-                    // console.log("fuckz")
                     var lineHoriz = collidedLines[0].isHorizontal
                         ? collidedLines[0]
                         : collidedLines[1];
@@ -162,7 +182,6 @@ class Player {
 
     handleCollision(line) {
         if (line.isHorizontal) {
-            // console.log("horiz")
             this.justBouncedOffWall = false;
             if (this.velocity.y >= 0 && !this.onPlatform) {
                 this.onPlatform = true;
@@ -174,14 +193,11 @@ class Player {
                 this.y += this.velocity.y;
             }
         } else if (line.isVertical) {
-            // console.log("vert")
-
             this.x = this.velocity.x > 0 ? line.x1 - this.width : line.x1;
             this.velocity.x = -(this.velocity.x / 2); // Dull and invert x velocity when we bounce off a wall
             this.justBouncedOffWall = true;
         } else {
             this.y = this.getDiagonalYIntersect(line) - this.height - 1;
-            // console.log(line.x1 +","+line.x2 +"," +line.y1 +"," + line.y2 +",")
 
             if (line.x2 > line.x1) {
                 this.velocity.x = this.diagonalSlideSpeed;
@@ -271,13 +287,7 @@ class Player {
             ((line.y2 - line.y1) * (x2 - x1) - (line.x2 - line.x1) * (y2 - y1));
 
         // if uA and uB are between 0-1, lines are colliding
-        if (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1) {
-            // optionally, draw a circle where the lines meet
-
-            // console.log("DAB")
-
-            return true;
-        }
+        if (uA >= 0 && uA <= 1 && uB >= 0 && uB <= 1) return true;
 
         return false;
     }
