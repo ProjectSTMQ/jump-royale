@@ -29,12 +29,13 @@ class Player {
         this.onPlatform = false;
         this.justBouncedOffWall = false;
         this.isRunning = false;
-        this.runIndex = 0; // To loop running animation
-        this.facingLeft = false; // Player is either facing left or right
+        this.runIndex = 0; // Counter for the running animation
+        this.facingLeft = false; // Used for flipping the image when facing left
         this.leftHeld = false;
         this.rightHeld = false;
         this.jumpHeld = false;
         this.state = null; // For drawing the correct image
+        this.previousState = null; // For detecting changes in state for playing the correct sound
     }
 
     getPlayerState() {
@@ -53,9 +54,14 @@ class Player {
         return "fall"
     }
 
+    updatePlayerStates(){
+        if(this.state != null) this.previousState = this.state;
+        this.state = this.getPlayerState();
+    }
+
     update(map) {
         let currentLines = map.levels[this.levelNum - 1].lines;
-        this.state = this.getPlayerState();
+        this.updatePlayerStates();
         this.checkLineCollisions(currentLines);
         this.applyPlayerMovement();
         this.updateJumpStrength();
@@ -75,6 +81,7 @@ class Player {
         this.levelImage = map.levels[this.levelNum - 1].image;
         this.levelLines = map.levels[this.levelNum - 1].lines;
     }
+
     applyPlayerMovement() {
         this.isRunning = false;
         if (this.rightHeld && this.onPlatform) {

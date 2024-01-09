@@ -39,6 +39,12 @@ fallenImage.src = "./imgs/poses/fallen.png";
 let fallImage = new Image();
 fallImage.src = "./imgs/poses/fall.png";
 
+// Load player sounds
+let bounceSound = new Audio("./sounds/bounce.mp3");
+let fallSound = new Audio("./sounds/fall.mp3");
+let jumpSound = new Audio("./sounds/jump.mp3");
+let landSound = new Audio("./sounds/land.mp3");
+
 const frontendPlayers = {};
 
 const socket = io();
@@ -82,7 +88,7 @@ function draw() {
 }
 
 function drawPlayer(player) {
-    console.log(player.state);
+    // console.log("state: " + player.state + " | previous state: " + player.previousState);
 
     const drawImage = (image) => {
         if (player.facingLeft) {
@@ -98,15 +104,18 @@ function drawPlayer(player) {
     switch (player.state) {
         case "idle":
             drawImage(idleImage);
+            if(["fall", "bounce"].includes(player.previousState)) landSound.play();
             break;
         case "squat":
             drawImage(squatImage);
             break;
         case "jump":
             drawImage(jumpImage);
+            if(["squat"].includes(player.previousState)) jumpSound.play();
             break;
         case "bounce":
             drawImage(bounceImage);
+            if(["jump", "fall"].includes(player.previousState)) bounceSound.play();
             break;
         case "run1":
             drawImage(run1Image);
