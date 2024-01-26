@@ -45,17 +45,38 @@ let fallSound = new Audio("./sounds/fall.mp3");
 let jumpSound = new Audio("./sounds/jump.mp3");
 let landSound = new Audio("./sounds/land.mp3");
 
+let usernameSubmitted = false;
+
 const frontendPlayers = {};
+const frontendMap = new Map();
+
+const keys = {
+    "KeyA": {
+        "pressed" : false,
+    },
+    "KeyD": {
+        "pressed" : false,
+    },
+    "Space": {
+        "pressed" : false,
+        "previouslyPressed" : false
+    }
+};
 
 const socket = io();
+
+const username = null;
 
 socket.on("connect", () => {
     console.log("Connected to server");
     draw();
 });
 
-socket.on("updatePlayers", (backendPlayers) => {
+socket.on("updateMap", (backendMap) => {
+    this.frontendMap = backendMap;
+});
 
+socket.on("updatePlayers", (backendPlayers) => {
     for (const id in backendPlayers) {
         frontendPlayers[id] = backendPlayers[id];
     }
@@ -70,30 +91,43 @@ socket.on("updatePlayers", (backendPlayers) => {
 
 function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    //continiously draws, will run even before serverside update and in the middle of update
-    //fix so that stertling stops bitching  -> async await?
-    if (frontendPlayers[socket.id] && frontendPlayers[socket.id].levelImage) {
-        backgroundImg.src = frontendPlayers[socket.id].levelImage;
-        ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
-        currentLevel = frontendPlayers[socket.id].levelLines;
-
-        drawLevel(currentLevel); // Optional show level lines
-    }
-
     if(frontendPlayers[socket.id]){
+        let player = castToPlayer(frontendPlayers[socket.id]);
+
+        player.update(this.frontendMap);
+        frontendPlayers[socket.id] = player;
+
+        backgroundImg.src = player.levelImage;
+        currentLevel = player.levelLines;
+        ctx.drawImage(backgroundImg, 0, 0, canvas.width, canvas.height);
+
+        // drawLevel(currentLevel); // Optional show level lines
+
         for (const id in frontendPlayers) {
-            if (frontendPlayers[id].levelNum == frontendPlayers[socket.id].levelNum) {
+            if (frontendPlayers[id].levelNum == player.levelNum) {
                 drawPlayer(frontendPlayers[id]);
             }
         }
     }
-    console.log("DRAW")
     requestAnimationFrame(draw);
 }
 
 function drawPlayer(player) {
     // console.log("state: " + player.state + " | previous state: " + player.previousState);
+    
+    function drawUsername(text, x, y, width) {
+        ctx.fillStyle = "white";
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 2;
+        ctx.font = "20px Arial";
+        const textWidth = ctx.measureText(text).width;
+        const textX = x + (width - textWidth) / 2;
+        ctx.strokeText(text, textX, y);
+        ctx.fillText(text, textX, y);
+        ctx.lineWidth = 1;
+    }
+
+    if (player.username) drawUsername(player.username, player.x, player.y, player.width);
 
     const drawImage = (image) => {
         if (player.facingLeft) {
@@ -144,8 +178,8 @@ function drawPlayer(player) {
     }
 
     // show true hitbox size
-    ctx.strokeStyle = "purple";
-    ctx.strokeRect(player.x, player.y, player.width, player.height);
+    // ctx.strokeStyle = "purple";
+    // ctx.strokeRect(player.x, player.y, player.width, player.height);
 }
 
 function drawLevel(level) {
@@ -170,43 +204,84 @@ function castToPlayer(obj) {
     return Object.assign(new Player(), obj)
 }
 
-window.addEventListener("keydown", (event) => {
+setInterval(() => {
     let player = castToPlayer(frontendPlayers[socket.id]);
+
+    if(keys.KeyA.pressed) {
+        player.leftHeld = true;
+        socket.emit("keydown", "KeyA");
+    }
+    else{
+        player.leftHeld = false;
+        socket.emit("keyup", "KeyA");
+    }
+
+    if(keys.KeyD.pressed) {
+        player.rightHeld = true;
+        socket.emit("keydown", "KeyD");
+    }
+    else{
+        player.rightHeld = false;
+        socket.emit("keyup", "KeyD");
+    }
+
+
+    if(keys.Space.pressed) {
+        if (player.onPlatform) {
+            player.jumpHeld = true;
+        }
+        socket.emit("keydown", "Space");
+    }
+    else{
+        if(keys.Space.previouslyPressed){
+            keys.Space.previouslyPressed = false;
+            if (player.onPlatform) {
+                player.jumpHeld = false;
+                player.jump();
+            }
+            socket.emit("keyup", "Space");
+        }
+    }
+
+    frontendPlayers[socket.id] = player;
+}, 15);
+
+window.addEventListener("keydown", (event) => {
+    if (!this.usernameSubmitted) return; // Don't allow player to move until they've submitted a username - kinda janky since it's on frontend but it works i guess
     switch (event.code) {
         case "KeyA":
-            // player.leftHeld = true;
-            socket.emit("keydown", "KeyA");
+            keys.KeyA.pressed = true;
             break;
         case "KeyD":
-            // player.rightHeld = true;
-            socket.emit("keydown", "KeyD");
+            keys.KeyD.pressed = true;
             break;
         case "Space":
-            // if (player.onPlatform) {
-            //     player.jumpHeld = true;
-            // }
-            socket.emit("keydown", "Space");
+            keys.Space.pressed = true;
+            keys.Space.previouslyPressed = true;
             break;
     }
 });
 
 window.addEventListener("keyup", (event) => {
-    let player = castToPlayer(frontendPlayers[socket.id]);
     switch (event.code) {
         case "KeyA":
-            // player.leftHeld = false;
-            socket.emit("keyup", "KeyA");
+            keys.KeyA.pressed = false;
             break;
         case "KeyD":
-            // player.rightHeld = false;
-            socket.emit("keyup", "KeyD");
+            keys.KeyD.pressed = false;
             break;
         case "Space":
-            // if (player.onPlatform) {
-            //     player.jumpHeld = false;
-            //     player.jump();
-            // }
-            socket.emit("keyup", "Space");
+            keys.Space.pressed = false;
             break;
+    }
+});
+
+document.querySelector("#usernameForm").addEventListener("submit", (event) => {
+    event.preventDefault(); // Prevent page refresh
+    const username = document.querySelector("#usernameInput").value;
+    document.querySelector("#usernameForm").style.display = "none";
+    if (username) {
+        this.usernameSubmitted = true;
+        socket.emit("username", username);
     }
 });

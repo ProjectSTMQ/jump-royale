@@ -1,5 +1,7 @@
 class Player {
     constructor(x = 580, y = 755, levelNum = 1) {
+        this.username = null;
+
         // Spatial properties
         this.width = 50;
         this.height = 65;

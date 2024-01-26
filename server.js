@@ -23,12 +23,18 @@ const backendPlayers = {};
 const map = new Map();
 
 app.use(express.static(path.join(__dirname, "./public"))); // Game files
+app.get("/null", (req, res) => {});
 
 io.on("connection", (socket) => {
     console.log(`[${socket.id}] a user connected`);
     backendPlayers[socket.id] = new Player();
 
     io.emit("updatePlayers", backendPlayers);
+    io.emit("updateMap", map);
+
+    socket.on("username", (username) => {
+        backendPlayers[socket.id].username = username;
+    });
 
     socket.on("disconnect", (reason) => {
         console.log(`[${socket.id}] a user disconnected with reason: ${reason}`);
