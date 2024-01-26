@@ -42,7 +42,7 @@ def random_crap():
     functions = ["jump", "jump_right", "jump_left", "move_right", "move_left"]
     while True:
         function = random.choice(functions)
-        duration = random.randint(0, 2)
+        duration = random.uniform(0, 2)
         if function == "jump":
             jump(duration)
         elif function == "jump_right":
