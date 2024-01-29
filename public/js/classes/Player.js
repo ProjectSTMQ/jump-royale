@@ -15,16 +15,16 @@ class Player {
         this.levelLines = {};
 
         // Static properties
-        this.gravity = 0.15;
+        this.gravity = 0.55;
         this.maxVerticalSpeed = 20;
-        this.lateralJumpingSpeed = 4;
-        this.playerMovementSpeed = 2;
+        this.lateralJumpingSpeed = 8.5;
+        this.playerMovementSpeed = 5;
         this.diagonalSlideSpeed = 3;
         // STILL NEEDS TUNING
         this.baseJumpStrength = 2; // Minimum jump strength
         this.jumpStrength = this.baseJumpStrength; // Dynamically changes
         this.jumpIncreaseSpeed = 0.3; // Speed at which jump strength increases as you hold
-        this.maxJumpStrength = 10.5; // Maximum power we can jump
+        this.maxJumpStrength = 21; // Maximum power we can jump
         this.isJumping = false;
 
         // Dynamic properties
