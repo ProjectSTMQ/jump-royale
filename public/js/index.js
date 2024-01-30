@@ -104,7 +104,7 @@ function draw() {
         // drawLevel(currentLevel); // Optional show level lines
 
         for (const id in frontendPlayers) {
-            if (frontendPlayers[id].levelNum == player.levelNum) {
+            if (frontendPlayers[id].levelNum == player.levelNum && frontendPlayers[id].username != null) {
                 drawPlayer(frontendPlayers[id]);
             }
         }
@@ -279,8 +279,12 @@ window.addEventListener("keyup", (event) => {
 document.querySelector("#usernameForm").addEventListener("submit", (event) => {
     event.preventDefault(); // Prevent page refresh
     const username = document.querySelector("#usernameInput").value;
-    document.querySelector("#usernameForm").style.display = "none";
+   
     if (username) {
+
+        document.querySelector("#usernameDiv").classList.toggle("fade-out");
+        //document.querySelector("#usernameDiv").classList.toggle("disabled");
+       // document.querySelector("#usernameForm").style.display = "none";
         this.usernameSubmitted = true;
         socket.emit("username", username);
     }
