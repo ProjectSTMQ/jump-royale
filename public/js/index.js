@@ -286,10 +286,7 @@ document.querySelector("#usernameForm").addEventListener("submit", (event) => {
     const username = document.querySelector("#usernameInput").value;
    
     if (username) {
-
         document.querySelector("#usernameDiv").classList.toggle("fade-out");
-        //document.querySelector("#usernameDiv").classList.toggle("disabled");
-       // document.querySelector("#usernameForm").style.display = "none";
         this.usernameSubmitted = true;
         socket.emit("username", username);
     }
