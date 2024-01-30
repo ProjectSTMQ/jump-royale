@@ -127,16 +127,21 @@ function drawPlayer(player) {
         ctx.lineWidth = 1;
     }
 
-    if (player.username) drawUsername(player.username, player.x, player.y, player.width);
+    if (player.username) drawUsername(player.username, player.x, player.y - 10, player.width);
 
     const drawImage = (image) => {
+        // To better match the size of the original game
+        const sizeMultiplier = 1.5;
+        const yOffset = 30;
+        const xOffset = 10;
+
         if (player.facingLeft) {
             ctx.save();
             ctx.scale(-1, 1); // Flip horizontally
-            ctx.drawImage(image, -player.x - player.width, player.y, player.width, player.height);
+            ctx.drawImage(image, -player.x - player.width - xOffset, player.y - yOffset, player.width * sizeMultiplier, player.height * sizeMultiplier);
             ctx.restore();
         } else {
-            ctx.drawImage(image, player.x, player.y, player.width, player.height);
+            ctx.drawImage(image, player.x - xOffset, player.y - yOffset, player.width * sizeMultiplier, player.height * sizeMultiplier);
         }
     };
 
