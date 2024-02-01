@@ -287,7 +287,7 @@ document.querySelector("#usernameForm").addEventListener("submit", (event) => {
    
     if (username) {
 
-        document.querySelector("#usernameDiv").classList.toggle("fade-out");
+        document.querySelector("#usernameDiv").classList.add("fade-out-usernameDiv");
         //document.querySelector("#usernameDiv").classList.toggle("disabled");
        // document.querySelector("#usernameForm").style.display = "none";
         this.usernameSubmitted = true;
