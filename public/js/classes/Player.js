@@ -1,16 +1,20 @@
+const initX = 580;
+const initY = 755;
+const initLevelNum = 1;
+
 class Player {
-    constructor(x = 580, y = 755, levelNum = 1) {
+    constructor() {
         this.username = null;
 
         // Spatial properties
         this.width = 50;
         this.height = 65;
-        this.x = x;
-        this.y = y;
+        this.x = initX;
+        this.y = initY;
         this.velocity = { x: 0, y: 0 };
 
         // Level properties
-        this.levelNum = levelNum;
+        this.levelNum = initLevelNum;
         this.levelImage = null;
         this.levelLines = {};
 
@@ -76,8 +80,15 @@ class Player {
             this.levelNum += 1;
             this.y = map.canvasHeight;
         } else if (this.y > map.canvasHeight) {
-            this.levelNum -= 1;
-            this.y = 0;
+            if(this.levelNum > 1){
+                this.levelNum -= 1;
+                this.y = 0;
+            }
+            // If we're on level 1, we don't want to go below the canvas
+            else {
+                this.x = initX;
+                this.y = initY;
+            }
         }
 
         this.levelImage = map.levels[this.levelNum - 1].image;
