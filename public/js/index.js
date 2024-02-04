@@ -95,6 +95,7 @@ function draw() {
         let player = castToPlayer(frontendPlayers[socket.id]);
 
         player.update(this.frontendMap);
+        
         frontendPlayers[socket.id] = player;
 
         backgroundImg.src = player.levelImage;
@@ -281,13 +282,44 @@ window.addEventListener("keyup", (event) => {
     }
 });
 
+document.querySelector("#usernameButton").addEventListener("mouseover", (event) => {
+    
+    document.querySelector(" #playerImg").src= "./imgs/poses/jump.png";
+});
+document.querySelector("#usernameButton").addEventListener("mouseout", (event) => {
+
+    if( document.querySelector(" #playerImg").src == window.location.href +"imgs/poses/jump.png"){
+        document.querySelector(" #playerImg").src= "./imgs/poses/idle.png";
+    }
+});
+
+
+
+document.querySelector("#usernameForm").addEventListener("keyup", (event) => {
+ 
+    if(document.querySelector("#usernameInput").value){
+        document.querySelector("#usernameDisplay").innerHTML= document.querySelector("#usernameInput").value;
+    }
+    else{
+        document.querySelector("#usernameDisplay").innerHTML= "Your Name";
+    }
+ 
+  
+});
+
 document.querySelector("#usernameForm").addEventListener("submit", (event) => {
     event.preventDefault(); // Prevent page refresh
     const username = document.querySelector("#usernameInput").value;
    
     if (username) {
-
+        document.querySelector(" #playerImg").src= "./imgs/poses/fall.png";
         document.querySelector("#usernameDiv").classList.add("fade-out-usernameDiv");
+        document.querySelector("#usernameHeader").style.opacity=0;
+        document.querySelector("#usernameForm").style.opacity=0;
+       
+        console.log( document.querySelector("#playerImg").src);
+        document.querySelector("#playerDiv").classList.add("loginTransition");
+     
         this.usernameSubmitted = true;
         socket.emit("username", username);
     }

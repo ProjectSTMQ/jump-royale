@@ -9,7 +9,11 @@
 
 <!-- username input -->
 <div id = "usernameDiv" class = "usernameDiv">
-  <h1 class="header">Jump Royale</h1>
+  <h1  id="usernameHeader" class="header">Jump Royale</h1>
+  <div id="playerDiv"  class = "playerDiv">
+    <p id = "usernameDisplay" class = "playerUsername"> Your Name</p>
+    <img id = "playerImg" src="./imgs/poses/idle.png" >
+  </div>
   <form id="usernameForm" class="usernameForm">
    
     <div>
@@ -21,8 +25,9 @@
         class="usernameInput"
       />
     </div>
+  
     <div style="text-align: center; margin-top: 8px; ">
-      <button
+      <button id="usernameButton"
         class="usernameButton"
       >
         Start!
