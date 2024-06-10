@@ -3,7 +3,7 @@ An online multiplayer platforming game, based on [Jump King](https://store.steam
 This inspiration behind this project comes from a bet between friends on who could finish the original game first. We thought it would be a neat idea to have multiplayer functionality.
 
 ---
-## Gameplay - try it [here!](http://18.217.5.78:5000/) (Hosted using an AWS free EC2 instance)
+## Gameplay - try it [here!](http://147.185.221.18:18222/) (Self hosted on my personal linux server)
 
 ![](https://github.com/ProjectSTMQ/jump-royale/blob/main/readme/gameplay.gif?raw=true)
 
